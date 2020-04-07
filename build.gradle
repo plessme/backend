@@ -1,0 +1,53 @@
+plugins {
+    id 'java'
+    id 'io.quarkus'
+    id 'com.cosminpolifronie.gradle.plantuml' version '1.6.0'
+}
+
+repositories {
+     mavenLocal()
+     mavenCentral()
+}
+
+configurations {
+    umlDoclet
+}
+
+dependencies {
+    umlDoclet "nl.talsmasoftware:umldoclet:2.0.7"
+
+    implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
+    implementation 'io.quarkus:quarkus-mongodb-panache'
+    implementation 'io.quarkus:quarkus-resteasy-jsonb'
+    implementation 'io.quarkus:quarkus-rest-client'
+    implementation 'io.quarkus:quarkus-vertx'
+    implementation 'io.quarkus:quarkus-oidc'
+
+    testImplementation 'io.quarkus:quarkus-junit5'
+}
+
+group 'quarkus'
+version '0.1.0-SNAPSHOT'
+
+compileJava {
+    options.compilerArgs << '-parameters'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+javadoc {
+    source = sourceSets.main.allJava
+    options.docletpath = configurations.umlDoclet.files.asType(List)
+    options.doclet = "nl.talsmasoftware.umldoclet.UMLDoclet"
+    options.addStringOption "umlImageDirectory", "docs/diagrams/out/umldoc.png"
+    options.addStringOption "umlImageFormat", "png"
+    options.addStringOption "failOnCyclicPackageDependencies", "true"
+}
+
+plantUml {
+    render input: 'docs/diagrams/src/usecase.puml', output: 'docs/diagrams/out/usecase.png', format: 'png', withMetadata: false
+    render input: 'docs/diagrams/src/scenario-uploadDocument.puml', output: 'docs/diagrams/out/scenario-uploadDocument.png', format: 'png', withMetadata: false
+}

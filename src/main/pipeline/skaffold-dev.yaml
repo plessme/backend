@@ -1,0 +1,20 @@
+apiVersion: skaffold/v2alpha4
+kind: Config
+metadata:
+  name: plessme
+build:
+  tagPolicy:
+    gitCommit: {}
+  artifacts:
+  - image: ingress-nginx-svc.kube-system.svc.bongladesch.com/docker-dev/plessme
+    context: .
+    kaniko:
+     dockerfile: src/main/docker/Dockerfile
+     skipTLS: True
+ cluster:
+   namespace: build
+   pullSecretName: regcred-dev
+deploy:
+  kubectl:
+    manifests:
+    - src/main/kubernetes/*.yaml

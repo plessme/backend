@@ -1,0 +1,14 @@
+@startuml Scenario Upload Document
+scale 2
+actor user
+entity API
+entity DocumentLoader
+entity User
+entity Document
+database S3
+user -> API : REST
+API -> DocumentLoader
+DocumentLoader -> User
+User -> Document
+Document -> User
+@enduml

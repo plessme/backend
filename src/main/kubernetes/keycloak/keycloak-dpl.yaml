@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: keycloak
+    group: plessme
+  name: plessme-keycloak-dpl
+  namespace: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: keycloak
+      group: plessme
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: keycloak
+        group: plessme
+    spec:
+      containers:
+      - image: jboss/keycloak:9.0.2
+        name: keycloak
+        resources:
+          limits:
+            cpu: "2"
+            memory: 2048Mi
+          requests:
+            cpu: "0.1"
+            memory: 256Mi
+        envFrom:
+        - configMapRef:
+            name: plessme-keycloak-cm
+        ports:
+        - name: http
+          containerPort: 8080

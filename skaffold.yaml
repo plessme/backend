@@ -1,0 +1,26 @@
+apiVersion: skaffold/v2alpha4
+kind: Config
+metadata:
+  name: plessme-backend
+build:
+  tagPolicy:
+    gitCommit: {}
+  artifacts:
+  - image: jcr.bongladesch.com/docker-dev/plessme
+    context: .
+    docker:
+      dockerfile: src/main/docker/Dockerfile.dev
+    sync:
+      infer:
+      - 'build.gradle'
+      - 'settings.gradle'
+      - 'gradle.properties'
+      - 'src/**/*.java'
+      - 'src/**/*.properties'
+deploy:
+  kubectl:
+    manifests:
+    - src/main/kubernetes/backend/*.yaml
+#    - src/main/kubernetes/postgres/*.yaml
+#    - src/main/kubernetes/keycloak/*.yaml
+#    - src/main/kubernetes/mongo/*.yaml
