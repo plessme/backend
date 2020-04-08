@@ -1,17 +1,15 @@
 package com.bongladesch.plessme.users.adapter.keycloak;
 
+import com.bongladesch.plessme.users.entity.User;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import com.bongladesch.plessme.users.entity.User;
-
 /**
- * KeycloakUserRepresentation represents a Keycloak API user
- * object for creation and request of users with credentials,
- * groups and roles.
- */
+* KeycloakUserRepresentation represents a Keycloak API user object for creation and request of
+* users with credentials, groups and roles.
+*/
 public class KeycloakUserRepresentation {
     public String id;
     public Long createdTimestamp;
@@ -23,19 +21,17 @@ public class KeycloakUserRepresentation {
     public String email;
     public List<KeycloakCredentialRepresentation> credentials;
     public List<String> groups;
-    public Map<String,List<String>>	attributes;
+    public Map<String, List<String>> attributes;
 
-    /**
-     * Default constructor for JSON deserialization.
-     */
+    /** Default constructor for JSON deserialization. */
     public KeycloakUserRepresentation() {}
 
     /**
-     * Constructor for creation of KeycloakUserRespository from user data.
-     * The users ID is added as an attribute.
-     * The user is added to the group "users" per default.
-     * @param user user object from application logic
-     */
+    * Constructor for creation of KeycloakUserRespository from user data. The users ID is added as an
+    * attribute. The user is added to the group "users" per default.
+    *
+    * @param user user object from application logic
+    */
     public KeycloakUserRepresentation(final User user) {
         this.username = user.getEmail();
         this.enabled = true;

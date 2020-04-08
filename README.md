@@ -97,13 +97,17 @@ folder in the root of this project with the following content:
 ### Packaging and running the application
 
 The application is packageable using `./gradlew quarkusBuild`.
-<!-- TODO use spotless freshmark for version -->
+<!---freshmark SECTION
+output = "It produces the executable `plessme-backend-{{version}}-runner.jar` file in `build` directory.";
+-->
 It produces the executable `plessme-backend-0.1.0-SNAPSHOT-runner.jar` file in `build` directory.
+<!---freshmark /SECTION -->
 Be aware that it’s not an _über-jar_ as the dependencies are copied into the `build/lib` directory.
-
-<!-- TODO use spotless freshmark for version -->
+<!---freshmark SECTION
+output = "The application is now runnable using `java -jar build/plessme-backend-{{version}}-runner.jar`.";
+-->
 The application is now runnable using `java -jar build/plessme-backend-0.1.0-SNAPSHOT-runner.jar`.
-
+<!---freshmark /SECTION -->
 If you want to build an _über-jar_, just add the `--uber-jar` option to the command line:
 
 ```bash
@@ -115,9 +119,11 @@ If you want to build an _über-jar_, just add the `--uber-jar` option to the com
 You can create a native executable using: `./gradlew buildNative`.
 
 Or you can use Docker to build the native executable using: `./gradlew buildNative --docker-build=true`.
-<!-- TODO use spotless freshmark for version -->
+<!---freshmark SECTION
+output = "You can then execute your binary: `./build/plessme-backend-{{version}}-runner`";
+-->
 You can then execute your binary: `./build/plessme-backend-0.1.0-SNAPSHOT-runner`
-.vscode/
+<!---freshmark /SECTION -->
 If you want to learn more about building native executables, please consult <https://quarkus.io/guides/gradle-tooling#building-a-native-executable> .
 
 ### Running the tests
@@ -141,7 +147,23 @@ These tests are created with Postman and can be executed within Postman on your 
 
 ### Code formatting
 
-<!-- TODO add information about code formatting here -->
+Code formatting is an important quality aspect of good source code. Therefore a code formatter is added to this project called **spotless**.
+
+Spotless is a powerfull and generic tool and supports various of standard code formats. For this projects spotless is added as Gradle plugin
+and configured for [Google's Java Format](https://github.com/google/google-java-format).
+To format the code before pushing to a remote branch execute:
+
+```bash
+./gradlew spotlessApply
+```
+
+To check if your code already corresponds to the desired format execute:
+
+```bash
+./gradlew spotlessCheck
+```
+
+This is also a good possibility to integrate code formatting into the CI/CD pipeline.
 
 ## Versioning
 

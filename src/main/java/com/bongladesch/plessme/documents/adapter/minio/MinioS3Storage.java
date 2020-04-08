@@ -1,8 +1,7 @@
 package com.bongladesch.plessme.documents.adapter.minio;
 
-import javax.enterprise.context.ApplicationScoped;
-
 import com.bongladesch.plessme.documents.usecase.IStorage;
+import javax.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
 public class MinioS3Storage implements IStorage {

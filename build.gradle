@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'io.quarkus'
+    id "com.diffplug.gradle.spotless" version "3.28.1"
     id 'com.cosminpolifronie.gradle.plantuml' version '1.6.0'
 }
 
@@ -14,8 +15,6 @@ configurations {
 }
 
 dependencies {
-    umlDoclet "nl.talsmasoftware:umldoclet:2.0.7"
-
     implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
     implementation 'io.quarkus:quarkus-mongodb-panache'
     implementation 'io.quarkus:quarkus-resteasy-jsonb'
@@ -24,10 +23,9 @@ dependencies {
     implementation 'io.quarkus:quarkus-oidc'
 
     testImplementation 'io.quarkus:quarkus-junit5'
-}
 
-group 'quarkus'
-version '0.1.0-SNAPSHOT'
+    umlDoclet "nl.talsmasoftware:umldoclet:2.0.7"
+}
 
 compileJava {
     options.compilerArgs << '-parameters'
@@ -36,6 +34,24 @@ compileJava {
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+spotless {
+    format 'misc', {
+        target '**/*.gradle', '**/*.properties', '**/*.md', '**/.gitignore', '**/*.yaml', '**/Dockerfile*'
+        trimTrailingWhitespace()
+        indentWithSpaces()
+        endWithNewline()
+    }
+    java {
+        googleJavaFormat()
+        indentWithTabs(2)
+        indentWithSpaces(4)
+    }
+    freshmark {
+        target 'README.md'
+        propertiesFile('gradle.properties')
+    }
 }
 
 javadoc {

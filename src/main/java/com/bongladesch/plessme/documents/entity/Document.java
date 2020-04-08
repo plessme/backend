@@ -12,7 +12,13 @@ public class Document {
     private Collection<String> labels;
     private Collection<String> categories;
 
-    private Document(final String id, final Date creation, final Date update, final String content, final Collection<String> labels, final Collection<String> categories) {
+    private Document(
+            final String id,
+            final Date creation,
+            final Date update,
+            final String content,
+            final Collection<String> labels,
+            final Collection<String> categories) {
         this.id = id;
         this.creation = creation;
         this.update = update;
@@ -62,7 +68,8 @@ public class Document {
         }
 
         public Document build() {
-            return new Document(this.id, this.creation, this.update, this.content, this.labels, this.categories);
+            return new Document(
+                    this.id, this.creation, this.update, this.content, this.labels, this.categories);
         }
     }
 
@@ -81,7 +88,7 @@ public class Document {
     public String getContent() {
         return this.content;
     }
-    
+
     public Collection<String> getLabels() {
         return this.labels;
     }

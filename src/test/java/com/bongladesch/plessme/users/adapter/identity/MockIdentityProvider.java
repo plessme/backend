@@ -1,14 +1,12 @@
 package com.bongladesch.plessme.users.adapter.identity;
 
-import javax.enterprise.context.ApplicationScoped;
-
 import com.bongladesch.plessme.users.adapter.keycloak.KeycloakIdentityProvider;
 import com.bongladesch.plessme.users.entity.User;
-
 import io.quarkus.test.Mock;
+import javax.enterprise.context.ApplicationScoped;
 
 @Mock
-@ApplicationScoped 
+@ApplicationScoped
 public class MockIdentityProvider extends KeycloakIdentityProvider {
 
     @Override

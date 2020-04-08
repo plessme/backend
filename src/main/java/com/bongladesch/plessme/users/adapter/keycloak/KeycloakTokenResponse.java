@@ -1,9 +1,8 @@
 package com.bongladesch.plessme.users.adapter.keycloak;
 
 /**
- * KeycloakTokenResponse represents a OIDC token
- * request response JSON API object from Keycloak API.
- */
+* KeycloakTokenResponse represents a OIDC token request response JSON API object from Keycloak API.
+*/
 public class KeycloakTokenResponse {
     public String access_token;
     public int expires_in;

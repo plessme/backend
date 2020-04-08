@@ -1,12 +1,10 @@
 package com.bongladesch.plessme.users.adapter.database;
 
-import javax.enterprise.context.ApplicationScoped;
-
 import com.bongladesch.plessme.users.adapter.mongo.MongoUserRepository;
 import com.bongladesch.plessme.users.entity.User;
 import com.bongladesch.plessme.users.entity.User.UserBuilder;
-
 import io.quarkus.test.Mock;
+import javax.enterprise.context.ApplicationScoped;
 
 @Mock
 @ApplicationScoped
@@ -32,7 +30,7 @@ public class MockUserRepository extends MongoUserRepository {
 
     @Override
     public User findByEmail(String email) {
-        if(alreadyExists) {
+        if (alreadyExists) {
             UserBuilder builder = new UserBuilder();
             builder.email("me@test.com").password("password").firstName("my").lastName("name");
             return builder.build();
