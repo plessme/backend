@@ -1,0 +1,7 @@
+schemaVersion: 2.0.0
+
+fileExistenceTests:
+- name: "Check existance of native binary"
+  path: '/app/plessme-backend-0.1.0-SNAPSHOT-runner'
+  shouldExist: true
+  permissions: '-rwxrwxr-x'

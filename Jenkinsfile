@@ -33,12 +33,12 @@ pipeline {
         }
       }
     }
-    // stage('Build & Push & Deploy') {
-    //   steps {
-    //     container('buildpipeline') {
-    //       sh 'skaffold run'
-    //     }
-    //   }
-    // }
+    stage('Skaffold Build') {
+      steps {
+        container('buildpipeline') {
+          sh 'skaffold build --skip-tests=false -f src/main/pipeline/skaffold-dev.yaml'
+        }
+      }
+    }
   }
 }

@@ -6,15 +6,23 @@ build:
   tagPolicy:
     gitCommit: {}
   artifacts:
-  - image: ingress-nginx-svc.kube-system.svc.bongladesch.com/docker-dev/plessme
+  - image: ingress-nginx-svc.kube-system.svc.bongladesch.com/docker-dev/plessme-backend
+  # - image: jcr.bongladesch.com/docker-dev/plessme/backend
     context: .
     kaniko:
-     dockerfile: src/main/docker/Dockerfile
-     skipTLS: True
- cluster:
-   namespace: build
-   pullSecretName: regcred-dev
+      dockerfile: src/main/docker/Dockerfile
+      skipTLS: True
+    # docker:
+    #   dockerfile: src/main/docker/Dockerfile
+  cluster:
+    namespace: build
+    pullSecretName: regcred-dev
+test:
+  # - image: jcr.bongladesch.com/docker-dev/plessme/backend
+  - image: ingress-nginx-svc.kube-system.svc.bongladesch.com/docker-dev/plessme-backend
+    structureTests:
+      - src/test/docker/*
 deploy:
   kubectl:
     manifests:
-    - src/main/kubernetes/*.yaml
+    # - src/main/kubernetes/*.yaml
