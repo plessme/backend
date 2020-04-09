@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Pod
 metadata:
   labels:
-    repository: plessme/backend
+    repository: plessme
 spec:
   serviceAccountName: jenkins-sa
   containers:
