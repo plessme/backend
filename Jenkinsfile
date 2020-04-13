@@ -26,20 +26,20 @@ pipeline {
         }
       }
     }
-    stage('Build Native') {
-      steps {
-        container('buildpipeline') {
-          sh 'gradle buildNative'
-        }
-      }
-    }
-    stage('Skaffold Build') {
-      steps {
-        container('buildpipeline') {
-          sh 'skaffold build --skip-tests=true -f src/main/pipeline/skaffold-dev.yaml'
-        }
-      }
-    }
+    // stage('Build Native') {
+    //   steps {
+    //     container('buildpipeline') {
+    //       sh 'gradle buildNative'
+    //     }
+    //   }
+    // }
+    // stage('Skaffold Build') {
+    //   steps {
+    //     container('buildpipeline') {
+    //       sh 'skaffold build --skip-tests=true -f src/main/pipeline/skaffold-dev.yaml'
+    //     }
+    //   }
+    // }
   }
   post {
     always {
