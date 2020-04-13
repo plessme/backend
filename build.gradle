@@ -38,9 +38,15 @@ java {
 
 spotless {
     format 'misc', {
-        target '**/*.gradle', '**/*.properties', '**/*.md', '**/.gitignore', '**/*.yaml', '**/Dockerfile*'
+        target '**/*.gradle', '**/*.properties', '**/*.md', '**/.gitignore', '**/Dockerfile*'
+        indentWithSpaces(4)
         trimTrailingWhitespace()
-        indentWithSpaces()
+        endWithNewline()
+    }
+    format 'yaml', {
+        target '**/*.yaml'
+        indentWithSpaces(2)
+        trimTrailingWhitespace()
         endWithNewline()
     }
     java {
