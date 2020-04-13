@@ -21,7 +21,7 @@ spec:
         group: plessme
     spec:
       containers:
-      - image: jcr.bongladesch.com/docker-dev/plessme
+      - image: jcr.bongladesch.com/docker-dev/plessme/backend
         imagePullPolicy: Always
         name: plessme
         ports:

@@ -36,9 +36,14 @@ pipeline {
     stage('Skaffold Build') {
       steps {
         container('buildpipeline') {
-          sh 'skaffold build --skip-tests=false -f src/main/pipeline/skaffold-dev.yaml'
+          sh 'skaffold build --skip-tests=true -f src/main/pipeline/skaffold-dev.yaml'
         }
       }
+    }
+  }
+  post {
+    always {
+      junit 'build/test-results/test/*.xml'
     }
   }
 }

@@ -6,7 +6,7 @@ build:
   tagPolicy:
     gitCommit: {}
   artifacts:
-  - image: jcr.bongladesch.com/docker-dev/plessme-backend
+  - image: jcr.bongladesch.com/docker-dev/plessme/backend
     context: .
     docker:
       dockerfile: src/main/docker/Dockerfile.dev
