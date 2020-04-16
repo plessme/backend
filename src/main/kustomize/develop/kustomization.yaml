@@ -25,4 +25,3 @@ namePrefix: plessme-develop-
     - ../base/keycloak
     - ../base/mongo
     - ../base/backend
-    
