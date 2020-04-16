@@ -3,6 +3,13 @@ namePrefix: plessme-build-
 commonLabels:
   environment: build
   testType: full-api
+patchesJson6902:
+- path: backend-profile-patch.yaml
+  target:
+    group: apps
+    version: v1
+    kind: Deployment
+    name: backend-dpl
 bases:
 - ../base/keycloak
 - ../base/mongo
