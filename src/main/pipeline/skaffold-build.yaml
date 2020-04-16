@@ -8,14 +8,12 @@ build:
   artifacts:
   - image: ingress-nginx-svc.kube-system.svc.bongladesch.com/docker-dev/plessme/backend
     context: .
-    # kaniko:
-    #   dockerfile: src/main/docker/Dockerfile
-    #   skipTLS: True
-    docker:
+    kaniko:
       dockerfile: src/main/docker/Dockerfile
-  # cluster:
-  #   namespace: build
-  #   pullSecretName: regcred-dev
+      skipTLS: True
+  cluster:
+    namespace: build
+    pullSecretName: regcred-dev
 test:
   - image: ingress-nginx-svc.kube-system.svc.bongladesch.com/docker-dev/plessme/backend
     structureTests:
