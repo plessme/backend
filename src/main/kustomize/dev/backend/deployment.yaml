@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: backend
+  name: backend-dpl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - image: jcr.bongladesch.com/docker-dev/plessme/backend-dev
+        imagePullPolicy: Always
+        name: backend
+        env:
+        - name: QUARKUS_PROFILE
+          value: dev
+        resources:
+          limits:
+            cpu: "2"
+            memory: 2048Mi
+          requests:
+            cpu: "0.1"
+            memory: 512Mi
+        ports:
+          - name: http
+            protocol: TCP
+            containerPort: 8080
+          - name: debug
+            protocol: TCP
+            containerPort: 5005

@@ -1,0 +1,15 @@
+resources:
+- deployment.yaml
+- service.yaml
+configMapGenerator:
+  - name: keycloak-realm-cm
+    files:
+    - plessme-realm.json
+  - name: keycloak-cm
+    literals:
+    - KEYCLOAK_IMPORT="/tmp/plessme-realm.json -Dkeycloak.profile.feature.upload_scripts=enabled"
+secretGenerator:
+- name: keycloak-secret
+  literals:
+    - KEYCLOAK_USER=keycloak
+    - KEYCLOAK_PASSWORD=keycloak

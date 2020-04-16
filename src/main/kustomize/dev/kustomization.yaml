@@ -1,0 +1,25 @@
+namespace: dev
+namePrefix: plessme-dev-
+commonLabels:
+  environment: dev
+  branchType: feature
+configMapGenerator:
+  - name: keycloak-ingress-cm
+    literals:
+    - PROXY_ADDRESS_FORWARDING=true
+patchesJson6902:
+- path: keycloak-ingress-patch.yaml
+  target:
+    group: apps
+    version: v1
+    kind: Deployment
+    name: keycloak-dpl
+resources:
+- ingress.yaml
+- backend/deployment.yaml
+- backend/service-debug.yaml
+- backend/service-http.yaml
+bases:
+- ../base/keycloak
+- ../base/mongo
+- ./mongo-express
