@@ -1,0 +1,9 @@
+namespace: build
+namePrefix: plessme-build-
+commonLabels:
+  environment: build
+  testType: full-api
+bases:
+- ../base/keycloak
+- ../base/mongo
+- ../base/backend
