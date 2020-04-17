@@ -1,0 +1,24 @@
+{
+	"id": "9115aa0c-b683-4ee9-a4fe-97a56cf4ab72",
+	"name": "PlessMe",
+	"values": [
+		{
+			"key": "token",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "keycloak-url",
+			"value": "http://plessme-build-keycloak-svc",
+			"enabled": true
+		},
+		{
+			"key": "backend-url",
+			"value": "http://plessme-build-backend-svc",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2020-04-17T09:37:30.326Z",
+	"_postman_exported_using": "Postman/7.22.1"
+}

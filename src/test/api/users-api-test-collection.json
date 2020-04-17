@@ -35,9 +35,9 @@
 					}
 				},
 				"url": {
-					"raw": "{{url}}/users",
+					"raw": "{{backend-url}}/users",
 					"host": [
-						"{{url}}"
+						"{{backend-url}}"
 					],
 					"path": [
 						"users"
@@ -113,9 +113,9 @@
 					]
 				},
 				"url": {
-					"raw": "{{url}}/auth/realms/plessme/protocol/openid-connect/token",
+					"raw": "{{keycloak-url}}/auth/realms/plessme/protocol/openid-connect/token",
 					"host": [
-						"{{url}}"
+						"{{keycloak-url}}"
 					],
 					"path": [
 						"auth",
@@ -162,9 +162,9 @@
 					}
 				},
 				"url": {
-					"raw": "{{url}}/users",
+					"raw": "{{backend-url}}/users",
 					"host": [
-						"{{url}}"
+						"{{backend-url}}"
 					],
 					"path": [
 						"users"
@@ -206,9 +206,9 @@
 					}
 				},
 				"url": {
-					"raw": "{{url}}/users",
+					"raw": "{{backend-url}}/users",
 					"host": [
-						"{{url}}"
+						"{{backend-url}}"
 					],
 					"path": [
 						"users"
@@ -250,9 +250,9 @@
 					}
 				},
 				"url": {
-					"raw": "{{url}}/users",
+					"raw": "{{backend-url}}/users",
 					"host": [
-						"{{url}}"
+						"{{backend-url}}"
 					],
 					"path": [
 						"users"
@@ -293,9 +293,9 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{url}}/users",
+					"raw": "{{backend-url}}/users",
 					"host": [
-						"{{url}}"
+						"{{backend-url}}"
 					],
 					"path": [
 						"users"
