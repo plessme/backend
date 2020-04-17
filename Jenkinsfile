@@ -44,7 +44,7 @@ pipeline {
     stage('Full API Tests') {
       steps {
         container('newman') {
-          sh 'newman run src/test/api/users-api-test-collection.json -e /etc/postman/api-test-build-env.json -r junit --reporter-junit-export="build/test-results/test/newman-report.xml'
+          sh 'newman run src/test/api/users-api-test-collection.json --environment="src/test/api/api-test-build-env.json" --reporters junit --reporter-junit-export="build/test-results/test/newman-report.xml"'
         }
       }
     }
