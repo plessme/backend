@@ -7,7 +7,13 @@ spec:
   serviceAccountName: jenkins-sa
   containers:
   - name: buildpipeline
-    image: jcr.bongladesch.com/docker/stack/buildpipeline:0.3.0
+    image: jcr.bongladesch.com/docker/stack/buildpipeline:0.4.0
+    imagePullPolicy: IfNotPresent
+    command:
+    - cat
+    tty: true
+  - name: newman
+    image: postman/newman:5.0.0-ubuntu
     imagePullPolicy: IfNotPresent
     command:
     - cat

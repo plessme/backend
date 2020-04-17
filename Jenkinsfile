@@ -43,9 +43,13 @@ pipeline {
     }
     stage('Full API Tests') {
       steps {
-        container('buildpipeline') {
-          // TODO implement full api tests with newman
-          sh 'echo "THIS STAGE IS NOT IMPLEMENTED."'
+        container('newman') {
+          sh 'cp src/test/api/users-api-test-collection.json /etc/postman/users-api-test-collection.json'
+        }
+      }
+      steps {
+        container('newman') {
+          sh 'newman run users-api-test-collection --environment /etc/postman/api-test-build-env.json  --reporters junit --reporter-junit-export="build/test-results/test/newman-report.xml'
         }
       }
     }
@@ -60,7 +64,6 @@ pipeline {
   post {
     always {
       junit 'build/test-results/test/*.xml'
-      // TODO add test results from newman
     }
   }
 }
