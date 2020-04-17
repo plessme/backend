@@ -41,17 +41,10 @@ pipeline {
         }
       }
     }
-    stage('Prepare Test Environment') {
-      steps {
-        container('newman') {
-          sh 'cp src/test/api/users-api-test-collection.json /etc/postman/users-api-test-collection.json'
-        }
-      }
-    }
     stage('Full API Tests') {
       steps {
         container('newman') {
-          sh 'newman run users-api-test-collection --environment /etc/postman/api-test-build-env.json  --reporters junit --reporter-junit-export="build/test-results/test/newman-report.xml'
+          sh 'newman run src/test/api/users-api-test-collection.json -e /etc/postman/api-test-build-env.json -r junit --reporter-junit-export="build/test-results/test/newman-report.xml'
         }
       }
     }
