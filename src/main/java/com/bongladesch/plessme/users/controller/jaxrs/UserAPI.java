@@ -24,9 +24,9 @@ import javax.ws.rs.core.Response;
 import org.jboss.resteasy.annotations.cache.NoCache;
 
 /**
-* UsersAPI implements a REST API with JAX-RS to address the request to the "users" component to the
-* related usecase implementations. This class also handles the exceptions thrown by the usecases
-* for invalid input.
+* UsersAPI implements a REST API with JAX-RS to address the requests to the "users" component to
+* the related usecase implementations. This class also handles the exceptions thrown by the
+* usecases for invalid input.
 */
 @Path("/users")
 public class UserAPI {
