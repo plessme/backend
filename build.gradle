@@ -36,6 +36,10 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
+buildNative {
+    enableHttpUrlHandler = true
+}
+
 spotless {
     format 'misc', {
         target '**/*.gradle', '**/*.properties', '**/*.md', '**/.gitignore', '**/Dockerfile*'
