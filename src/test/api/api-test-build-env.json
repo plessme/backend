@@ -9,12 +9,12 @@
 		},
 		{
 			"key": "keycloak-url",
-			"value": "http://plessme-build-keycloak-svc",
+			"value": "http://plessme-build-keycloak-svc:8080",
 			"enabled": true
 		},
 		{
 			"key": "backend-url",
-			"value": "http://plessme-build-backend-svc",
+			"value": "http://plessme-build-backend-svc:8080",
 			"enabled": true
 		}
 	],

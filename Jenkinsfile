@@ -38,14 +38,6 @@ pipeline {
         container('buildpipeline') {
           // TODO fix tests against kaniko
           sh 'skaffold run --skip-tests=true -f src/main/pipeline/skaffold-build.yaml'
-          sh 'pwd'
-        }
-      }
-    }
-    stage('Sleep') {
-      steps {
-        container('buildpipeline') {
-          sh 'sleep 3600'
         }
       }
     }
