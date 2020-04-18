@@ -39,12 +39,12 @@ spec:
           periodSeconds: 5
           timeoutSeconds: 5
           successThreshold: 1
-          failureThreshold: 3
+          failureThreshold: 12
         livenessProbe:
           httpGet:
             path: /healthz
             port: http
-          initialDelaySeconds: 100
+          initialDelaySeconds: 60
           periodSeconds: 10
           timeoutSeconds: 5
           successThreshold: 1
