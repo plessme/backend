@@ -20,9 +20,6 @@ spec:
       - image: jcr.bongladesch.com/docker-dev/plessme/backend-dev
         imagePullPolicy: Always
         name: backend
-        env:
-        - name: QUARKUS_PROFILE
-          value: dev
         resources:
           limits:
             cpu: "2"

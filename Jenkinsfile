@@ -48,17 +48,15 @@ pipeline {
         }
       }
     }
-    stage('Skaffold Delete') {
-      steps {
-        container('buildpipeline') {
-          sh 'skaffold delete -f src/main/pipeline/skaffold-build.yaml'
-        }
-      }
-    }
   }
   post {
     always {
       junit 'build/test-results/test/*.xml'
+    }
+    cleanup {
+      container('buildpipeline') {
+        sh 'skaffold delete -f src/main/pipeline/skaffold-build.yaml'
+      }
     }
   }
 }
