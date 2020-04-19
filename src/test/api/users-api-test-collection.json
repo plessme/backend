@@ -79,7 +79,7 @@
 						},
 						{
 							"key": "username",
-							"value": "plessme-users",
+							"value": "plessme-backend",
 							"type": "string"
 						}
 					]

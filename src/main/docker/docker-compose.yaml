@@ -8,6 +8,9 @@ services:
     environment:
       KEYCLOAK_USER: keycloak
       KEYCLOAK_PASSWORD: keycloak
+      KEYCLOAK_IMPORT: "/tmp/kc/plessme-realm.json -Dkeycloak.profile.feature.upload_scripts=enabled"
+    volumes:
+      - ${PWD}/src/main/kustomize/base/keycloak/plessme-realm.json:/tmp/kc/plessme-realm.json
   mongo:
     container_name: plessme-mongo
     image: mongo:4.2.5-bionic
@@ -16,9 +19,3 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: mongo
     ports:
       - "27017:27017"
-  # backend:
-  #   container_name: plessme-backend
-  #   image: jcr.bongladesch.com/docker/plessme/backend:dev
-  #   build: .
-  #   ports:
-  #     - "8080:8080"
