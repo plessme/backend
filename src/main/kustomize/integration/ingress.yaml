@@ -12,23 +12,7 @@ spec:
   - host: plessme-develop.bongladesch.com
     http:
       paths:
-      - path: /auth
-        backend:
-          serviceName: keycloak-svc
-          servicePort: 8080
       - path: /users
-        backend:
-          serviceName: backend-svc
-          servicePort: 8080
-      - path: /health
-        backend:
-          serviceName: backend-svc
-          servicePort: 8080
-      - path: /api
-        backend:
-          serviceName: backend-svc
-          servicePort: 8080
-      - path: /swagger
         backend:
           serviceName: backend-svc
           servicePort: 8080

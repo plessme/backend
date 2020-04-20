@@ -16,37 +16,22 @@ spec:
         backend:
           serviceName: keycloak-svc
           servicePort: 8080
-  - host: plessme-dev.bongladesch.com
-    http:
-      paths:
       - path: /mongo
         backend:
           serviceName: mongo-express-svc
           servicePort: 8081
-  - host: plessme-dev.bongladesch.com
-    http:
-      paths:
       - path: /users
         backend:
           serviceName: backend-http-svc
           servicePort: 8080
-  - host: plessme-dev.bongladesch.com
-    http:
-      paths:
-      - path: /healthz
+      - path: /health
         backend:
           serviceName: backend-http-svc
           servicePort: 8080
-  - host: plessme-dev.bongladesch.com
-    http:
-      paths:
       - path: /api
         backend:
           serviceName: backend-http-svc
           servicePort: 8080
-  - host: plessme-dev.bongladesch.com
-    http:
-      paths:
       - path: /swagger
         backend:
           serviceName: backend-http-svc
