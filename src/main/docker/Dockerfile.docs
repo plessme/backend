@@ -1,0 +1,3 @@
+FROM nginx:1.17.10
+
+COPY build/docs/javadoc/ /usr/share/nginx/html/docs

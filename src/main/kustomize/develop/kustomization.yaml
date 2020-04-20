@@ -26,3 +26,4 @@ bases:
 - ../base/keycloak
 - ../base/mongo
 - ../base/backend
+- ../base/docs
