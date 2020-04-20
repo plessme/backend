@@ -1,0 +1,27 @@
+namespace: develop
+namePrefix: plessme-develop-
+    commonLabels:
+      environment: develop
+      branchType: develop
+    configMapGenerator:
+      - name: keycloak-config-cm
+        literals:
+        - PROXY_ADDRESS_FORWARDING=true
+        - DB_VENDOR=postgres
+        - DB_ADDR=plessme-dev-postgres-svc
+        - DB_PORT=5432
+        - DB_DATABASE=keycloak
+        - KEYCLOAK_IMPORT="/tmp/plessme-realm.json -Dkeycloak.profile.feature.upload_scripts=enabled"
+    secretGenerator:
+    - name: keycloak-config-secret
+      literals:
+        - KEYCLOAK_USER=keycloak
+        - KEYCLOAK_PASSWORD=keycloak
+        - DB_USER=keycloak
+        - DB_PASSWORD=keycloak
+    resources:
+    - ingress.yaml
+    bases:
+    - ../base/keycloak
+    - ../base/mongo
+    - ../base/backend
