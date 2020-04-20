@@ -22,7 +22,7 @@ pipeline {
     stage('Javadocs with UML Classes') {
       steps {
         container('buildpipeline') {
-          sh 'gradle test'
+          sh 'gradle javadoc'
         }
       }
     }
