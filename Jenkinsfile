@@ -1,10 +1,46 @@
+//properties = null
+version = null
+def loadProperties() {
+    node {
+        //read gradle.properties
+        checkout scm
+        properties = new Properties()
+        File propertiesFile = new File("${workspace}/gradle.properties")
+        properties.load(propertiesFile.newDataInputStream())
+        version = properties.repo
+        // calculate version suffix
+        if (env.BRANCH_NAME == 'master') {
+          echo version 
+        }
+        if(env.BRANCH_NAME == 'develop') {
+          version += '-SNAPSHOT'
+        }
+        if(env.BRANCH_NAME.startsWith('release/')) {
+          version += '-rc-' + env.BUILD_NUMBER
+        }
+        if(env.BRANCH_NAME.startsWith('feature/')) {
+          echo version
+        }
+        echo version
+    }
+}
+
 pipeline {
   agent {
     kubernetes {
-      yamlFile 'src/main/pipeline/pod.yaml'
+      yamlFile 'src/main/pipeline/build-pod.yaml'
     }
   }
   stages {
+    stage('Prepare environment') {
+      steps {
+        container('buildpipeline') {
+          script {
+            loadProperties()
+          }
+        }
+      }
+    }
     stage('Validate Code Format') {
       steps {
         container('buildpipeline') {
