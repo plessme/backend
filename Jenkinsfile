@@ -81,6 +81,11 @@ pipeline {
         }
       }
     }
+    stage ('Publish Build Info to Artifactory') {
+      steps {
+        rtPublishBuildInfo (serverId: 'jcr')
+      }
+    }
     stage('Deploy to Develop Environment') {
       when { branch 'develop'}
       steps {
