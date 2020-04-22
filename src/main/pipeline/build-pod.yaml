@@ -8,7 +8,7 @@ spec:
   containers:
   - name: buildpipeline
     image: jcr.bongladesch.com/docker/stack/buildpipeline:0.6.0
-    imagePullPolicy: IfNotPresent
+    imagePullPolicy: Always
     command:
     - cat
     tty: true

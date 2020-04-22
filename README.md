@@ -100,13 +100,13 @@ The application is packageable using `./gradlew quarkusBuild`.
 <!---freshmark SECTION
 output = "It produces the executable `plessme-backend-{{version}}-runner.jar` file in `build` directory.";
 -->
-It produces the executable `plessme-backend-0.1.0-SNAPSHOT-runner.jar` file in `build` directory.
+It produces the executable `plessme-backend-0.1.0-runner.jar` file in `build` directory.
 <!---freshmark /SECTION -->
 Be aware that it’s not an _über-jar_ as the dependencies are copied into the `build/lib` directory.
 <!---freshmark SECTION
 output = "The application is now runnable using `java -jar build/plessme-backend-{{version}}-runner.jar`.";
 -->
-The application is now runnable using `java -jar build/plessme-backend-0.1.0-SNAPSHOT-runner.jar`.
+The application is now runnable using `java -jar build/plessme-backend-0.1.0-runner.jar`.
 <!---freshmark /SECTION -->
 If you want to build an _über-jar_, just add the `--uber-jar` option to the command line:
 
@@ -122,7 +122,7 @@ Or you can use Docker to build the native executable using: `./gradlew buildNati
 <!---freshmark SECTION
 output = "You can then execute your binary: `./build/plessme-backend-{{version}}-runner`";
 -->
-You can then execute your binary: `./build/plessme-backend-0.1.0-SNAPSHOT-runner`
+You can then execute your binary: `./build/plessme-backend-0.1.0-runner`
 <!---freshmark /SECTION -->
 If you want to learn more about building native executables, please consult <https://quarkus.io/guides/gradle-tooling#building-a-native-executable> .
 

@@ -1,30 +1,27 @@
-//properties = null
-version = null
-def loadProperties() {
-    node {
-        //read gradle.properties
-        checkout scm
-        properties = new Properties()
-        File propertiesFile = new File("${workspace}/gradle.properties")
-        properties.load(propertiesFile.newDataInputStream())
-        version = properties.repo
-        // calculate version suffix
-        if (env.BRANCH_NAME == 'master') {
-          echo version 
-        }
-        if(env.BRANCH_NAME == 'develop') {
-          version += '-SNAPSHOT'
-        }
-        if(env.BRANCH_NAME.startsWith('release/')) {
-          version += '-rc-' + env.BUILD_NUMBER
-        }
-        if(env.BRANCH_NAME.startsWith('feature/')) {
-          echo version
-        }
-        echo version
+/**
+ * Helper method for version ENV from gradle.properties
+ */
+def String getVersion() {
+  node {
+    //read gradle.properties
+    checkout scm
+    properties = new Properties()
+    File propertiesFile = new File("${workspace}/gradle.properties")
+    properties.load(propertiesFile.newDataInputStream())
+    version = properties.version
+    // calculate version suffix
+    if(env.BRANCH_NAME == 'develop') {
+      version += '-SNAPSHOT'
     }
+    if(env.BRANCH_NAME.startsWith('release/')) {
+      version += '-rc-' + env.BUILD_NUMBER
+    }
+  }
+  return version
 }
-
+/**
+ * Pipeline implementation
+ */
 pipeline {
   agent {
     kubernetes {
@@ -32,11 +29,11 @@ pipeline {
     }
   }
   stages {
-    stage('Prepare environment') {
+    stage('Prepare Environment') {
       steps {
         container('buildpipeline') {
           script {
-            loadProperties()
+            env.VERSION = getVersion()
           }
         }
       }
@@ -44,32 +41,32 @@ pipeline {
     stage('Validate Code Format') {
       steps {
         container('buildpipeline') {
-          sh 'gradle spotlessCheck'
+          sh 'gradle -Porg.gradle.parallel=true spotlessCheck'
         }
       }
     }
     stage('Unit Tests') {
       steps {
         container('buildpipeline') {
-          sh 'gradle test'
+          sh 'gradle -Porg.gradle.parallel=true test'
         }
       }
     }
     stage('Javadocs with UML Classes') {
       steps {
         container('buildpipeline') {
-          sh 'gradle javadoc'
+          sh "gradle -Porg.gradle.parallel=true -Pversion=${VERSION} javadoc"
         }
       }
     }
     stage('Build Native') {
       steps {
         container('buildpipeline') {
-          sh 'gradle buildNative'
+          sh "gradle -Porg.gradle.parallel=true -Pversion=${VERSION} buildNative"
         }
       }
     }
-    stage('Skaffold Run') {
+    stage('Deploy for API tests') {
       steps {
         container('buildpipeline') {
           // TODO fix tests against kaniko
@@ -77,10 +74,26 @@ pipeline {
         }
       }
     }
-    stage('Full API Tests') {
+    stage('Execute Full API Tests') {
       steps {
         container('newman') {
           sh 'newman run src/test/api/users-api-test-collection.json --environment="src/test/api/api-test-build-env.json" --reporters junit --reporter-junit-export="build/test-results/test/newman-report.xml" --timeout 5000 --verbose'
+        }
+      }
+    }
+    stage('Deploy to Develop') {
+      when { branch 'develop'}
+      steps {
+        container('buildpipeline') {
+          sh 'skaffold run --skip-tests=true -f src/main/pipeline/skaffold-develop.yaml'
+        }
+      }
+    }
+    stage('Deploy to Integration') {
+      when { branch 'master'}
+      steps {
+        container('buildpipeline') {
+          sh 'skaffold run --skip-tests=true -f src/main/pipeline/skaffold-master.yaml'
         }
       }
     }

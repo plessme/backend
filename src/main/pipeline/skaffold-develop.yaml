@@ -4,7 +4,8 @@ metadata:
   name: plessme
 build:
   tagPolicy:
-    gitCommit: {}
+    envTemplate:
+      template: "{{.IMAGE_NAME}}:{{.VERSION}}"
   artifacts:
   - image: ingress-nginx-svc.kube-system.svc.bongladesch.com/docker-dev/plessme/backend
     context: .
