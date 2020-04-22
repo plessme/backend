@@ -81,19 +81,32 @@ pipeline {
         }
       }
     }
-    stage('Deploy to Develop') {
+    stage('Deploy to Develop Environment') {
       when { branch 'develop'}
       steps {
         container('buildpipeline') {
+          // TODO fix tests against kaniko
           sh 'skaffold run --skip-tests=true -f src/main/pipeline/skaffold-develop.yaml'
         }
       }
     }
-    stage('Deploy to Integration') {
+    stage('Deploy to Staging Environment') {
+      when { branch pattern: "release/*" }
+      steps {
+        container('buildpipeline') {
+          // TODO fix tests against kaniko
+          // TODO test if staging deployment is working
+          sh 'skaffold run --skip-tests=true -f src/main/pipeline/skaffold-stage.yaml'
+        }
+      }
+    }
+    stage('Deploy to Integration Environment') {
       when { branch 'master'}
       steps {
         container('buildpipeline') {
-          sh 'skaffold run --skip-tests=true -f src/main/pipeline/skaffold-master.yaml'
+          // TODO fix tests against kaniko
+          // TODO test if integration deployment is working
+          sh 'skaffold run --skip-tests=true -f src/main/pipeline/skaffold-integration.yaml'
         }
       }
     }

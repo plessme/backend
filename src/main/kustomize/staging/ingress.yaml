@@ -9,7 +9,7 @@ metadata:
     certmanager.k8s.io/cluster-issuer: cscope-ci-certificate-authority
 spec:
   rules:
-  - host: plessme.bongladesch.com
+  - host: plessme-stage.bongladesch.com
     http:
       paths:
       - path: /auth
@@ -38,5 +38,5 @@ spec:
           servicePort: 80
   tls:
   - hosts:
-    - plessme.bongladesch.com
-    secretName: plessme-bongladesch-com-tls-secret
+    - plessme-stage.bongladesch.com
+    secretName: plessme-stage-bongladesch-com-tls-secret

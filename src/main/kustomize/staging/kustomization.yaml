@@ -1,8 +1,8 @@
-namespace: integration
-namePrefix: plessme-
+namespace: staging
+namePrefix: plessme-staging-
     commonLabels:
-      environment: integration
-      branchType: master
+      environment: staging
+      branchType: release
     configMapGenerator:
       - name: keycloak-config-cm
         literals:
