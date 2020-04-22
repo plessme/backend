@@ -59,6 +59,11 @@ pipeline {
         }
       }
     }
+    stage ('Publish Build Info to Artifactory') {
+      steps {
+        rtPublishBuildInfo (serverId: 'jcr')
+      }
+    }
     stage('Build Native') {
       steps {
         container('buildpipeline') {
@@ -79,11 +84,6 @@ pipeline {
         container('newman') {
           sh 'newman run src/test/api/users-api-test-collection.json --environment="src/test/api/api-test-build-env.json" --reporters junit --reporter-junit-export="build/test-results/test/newman-report.xml" --timeout 5000 --verbose'
         }
-      }
-    }
-    stage ('Publish Build Info to Artifactory') {
-      steps {
-        rtPublishBuildInfo (serverId: 'jcr')
       }
     }
     stage('Deploy to Develop Environment') {
