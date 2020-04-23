@@ -4,7 +4,7 @@
  */
 def String getVersion() {
   node {
-    //read gradle.properties
+    //read verson from gradle.properties
     checkout scm
     properties = new Properties()
     File propertiesFile = new File("${workspace}/gradle.properties")
@@ -22,7 +22,23 @@ def String getVersion() {
       version = commit.substring(0, 7)
     }
   }
+  // return calculated version string
   return version
+}
+def String getEnv() {
+  node {
+    env = ""
+    if(env.BRANCH_NAME == 'develop') {
+      env = 'develop'
+    }
+    if(env.BRANCH_NAME.startsWith('release/')) {
+      env = 'staging'
+    }
+    if(env.BRANCH_NAME.startsWith('master')) {
+      env = 'integration'
+    }
+    return env
+  }
 }
 /**
  * Pipeline implementation
@@ -39,6 +55,7 @@ pipeline {
         container('buildpipeline') {
           script {
             env.VERSION = getVersion()
+            env.ENV_NAME = getEnv()
           }
         }
       }
@@ -71,35 +88,43 @@ pipeline {
         }
       }
     }
-    stage ('Publish artifacts to Artifactory') {
-      when {
-        anyOf {
-          branch 'develop'
-          branch pattern: "release/*"
-          branch pattern: "feature/*" // for testing purposes
-          branch 'master'
-        }
-      }
-      steps {
-        rtUpload (
-          serverId: 'jcr',
-          spec: '''{
-            "files": [
-              {
-                "pattern": "build/*-runner",
-                "target": "plessme-generic-develop/backend/"
-              }
-            ]
-          }'''
-        )
-        rtPublishBuildInfo (serverId: 'jcr')
-      }
-    }
-    stage('Deploy for API tests') {
+    // stage ('Publish artifacts to Artifactory') {
+    //   when {
+    //     anyOf {
+    //       branch 'develop'
+    //       branch pattern: "release/*"
+    //       branch pattern: "feature/*" // for testing purposes
+    //       branch 'master'
+    //     }
+    //   }
+    //   steps {
+    //     rtUpload (
+    //       serverId: 'jcr',
+    //       spec: '''{
+    //         "files": [
+    //           {
+    //             "pattern": "build/*-runner",
+    //             "target": "plessme-generic-develop/backend/"
+    //           }
+    //         ]
+    //       }'''
+    //     )
+    //     rtPublishBuildInfo (serverId: 'jcr')
+    //   }
+    // }
+    stage('Build & Push Docker Image') {
       steps {
         container('buildpipeline') {
           // TODO fix tests against kaniko
-          sh 'skaffold run --skip-tests=true -f src/main/pipeline/skaffold-build.yaml'
+          sh 'skaffold build --skip-tests=true -f src/main/pipeline/skaffold-build.yaml'
+        }
+      }
+    }
+    stage('Deploy for Full API Tests') {
+      steps {
+        container('buildpipeline') {
+          // TODO fix tests against kaniko
+          sh 'skaffold deploy -f src/main/pipeline/skaffold-build.yaml'
         }
       }
     }
@@ -110,32 +135,19 @@ pipeline {
         }
       }
     }
-    stage('Deploy to Develop Environment') {
-      when { branch 'develop'}
-      steps {
-        container('buildpipeline') {
-          // TODO fix tests against kaniko
-          sh 'skaffold run --skip-tests=true -f src/main/pipeline/skaffold-develop.yaml'
+    stage("Deploy to Environment") {
+      when { 
+        anyOf {
+          branch 'master'
+          branch 'develop'
+          branch pattern: "release/*"
         }
       }
-    }
-    stage('Deploy to Staging Environment') {
-      when { branch pattern: "release/*" }
       steps {
         container('buildpipeline') {
           // TODO fix tests against kaniko
-          // TODO test if staging deployment is working
-          sh 'skaffold run --skip-tests=true -f src/main/pipeline/skaffold-stage.yaml'
-        }
-      }
-    }
-    stage('Deploy to Integration Environment') {
-      when { branch 'master'}
-      steps {
-        container('buildpipeline') {
-          // TODO fix tests against kaniko
-          // TODO test if integration deployment is working
-          sh 'skaffold run --skip-tests=true -f src/main/pipeline/skaffold-integration.yaml'
+          // TODO test if staging and integration deployment is working
+          sh "skaffold deploy --status-check -f src/main/pipeline/skaffold-${ENV_NAME}.yaml"
         }
       }
     }
