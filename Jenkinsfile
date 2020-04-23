@@ -1,5 +1,6 @@
 /**
- * Helper method for version ENV from gradle.properties
+ * Helper method for version string from
+ * gradle.properties or git information.
  */
 def String getVersion() {
   node {
@@ -15,6 +16,10 @@ def String getVersion() {
     }
     if(env.BRANCH_NAME.startsWith('release/')) {
       version += '-rc-' + env.BUILD_NUMBER
+    }
+    if(env.BRANCH_NAME.startsWith('feature/')) {
+      commit = "${GIT_COMMIT}"
+      version = commit.substring(0, 7)
     }
   }
   return version
@@ -59,16 +64,35 @@ pipeline {
         }
       }
     }
-    stage ('Publish Build Info to Artifactory') {
-      steps {
-        rtPublishBuildInfo (serverId: 'jcr')
-      }
-    }
     stage('Build Native') {
       steps {
         container('buildpipeline') {
           sh "gradle -Porg.gradle.parallel=true -Pversion=${VERSION} buildNative"
         }
+      }
+    }
+    stage ('Publish artifacts to Artifactory') {
+      when {
+        anyOf {
+          branch 'develop'
+          branch pattern: "release/*"
+          branch pattern: "feature/*" // for testing purposes
+          branch 'master'
+        }
+      }
+      steps {
+        rtUpload (
+          serverId: 'jcr',
+          spec: '''{
+            "files": [
+              {
+                "pattern": "build/*-runner",
+                "target": "plessme-generic-develop/backend/"
+              }
+            ]
+          }'''
+        )
+        rtPublishBuildInfo (serverId: 'jcr')
       }
     }
     stage('Deploy for API tests') {
