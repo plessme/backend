@@ -25,21 +25,21 @@ def String getVersion() {
   // return calculated version string
   return version
 }
-def String getEnv() {
-  node {
-    env = ""
-    if(env.BRANCH_NAME == 'develop') {
-      env = 'develop'
-    }
-    if(env.BRANCH_NAME.startsWith('release/')) {
-      env = 'staging'
-    }
-    if(env.BRANCH_NAME.startsWith('master')) {
-      env = 'integration'
-    }
-    return env
-  }
-}
+// def String getEnv() {
+//   node {
+//     env = ""
+//     if(env.BRANCH_NAME == 'develop') {
+//       env = 'develop'
+//     }
+//     if(env.BRANCH_NAME.startsWith('release/')) {
+//       env = 'staging'
+//     }
+//     if(env.BRANCH_NAME.startsWith('master')) {
+//       env = 'integration'
+//     }
+//     return env
+//   }
+// }
 /**
  * Pipeline implementation
  */
@@ -55,7 +55,7 @@ pipeline {
         container('buildpipeline') {
           script {
             env.VERSION = getVersion()
-            env.ENV_NAME = getEnv()
+            // env.ENV_NAME = getEnv()
           }
         }
       }
@@ -116,7 +116,7 @@ pipeline {
       steps {
         container('buildpipeline') {
           // TODO fix tests against kaniko
-          sh 'skaffold build --skip-tests=true -f src/main/pipeline/skaffold-build.yaml'
+          sh 'skaffold build --skip-tests=true --file-output=tags.json -f src/main/pipeline/skaffold-build.yaml'
         }
       }
     }
@@ -124,7 +124,7 @@ pipeline {
       steps {
         container('buildpipeline') {
           // TODO fix tests against kaniko
-          sh 'skaffold deploy -f src/main/pipeline/skaffold-build.yaml'
+          sh 'skaffold deploy --build-artifacts=tags.json -f src/main/pipeline/skaffold-build.yaml'
         }
       }
     }
@@ -147,7 +147,8 @@ pipeline {
         container('buildpipeline') {
           // TODO fix tests against kaniko
           // TODO test if staging and integration deployment is working
-          sh "skaffold deploy --status-check -f src/main/pipeline/skaffold-${ENV_NAME}.yaml"
+          // sh "skaffold deploy --status-check -f src/main/pipeline/skaffold-${ENV_NAME}.yaml"
+          sh "skaffold deploy --status-check -f src/main/pipeline/skaffold-develop.yaml"
         }
       }
     }

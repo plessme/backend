@@ -1,0 +1,8 @@
+version: 1
+type: gradle
+deployer:
+  repo: plessme-generic-develop
+  serverId: jcr
+  deployMavenDescriptors: false
+  ivyPattern: '[organization]/[module]/ivy-[revision].xml'
+  artifactPattern: '[organization]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]'
