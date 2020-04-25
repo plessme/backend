@@ -6,7 +6,10 @@
 !build/*-runner.jar
 !build/lib/*
 
-# dev mode
+# documentation images
+!build/docs/javadoc
+
+# dev mode images
 !src/*
 !build.gradle
 !settings.gradle

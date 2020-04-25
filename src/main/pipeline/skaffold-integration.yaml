@@ -1,0 +1,6 @@
+kind: Config
+metadata:
+  name: plessme-backend
+deploy:
+  kustomize:
+    paths: ["src/main/kustomize/integration"]

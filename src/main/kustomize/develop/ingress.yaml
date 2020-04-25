@@ -32,6 +32,10 @@ spec:
         backend:
           serviceName: backend-svc
           servicePort: 8080
+      - path: /docs
+        backend:
+          serviceName: docs-svc
+          servicePort: 80
   tls:
   - hosts:
     - plessme-develop.bongladesch.com
