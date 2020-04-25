@@ -17,9 +17,9 @@ spec:
         app: backend
     spec:
       containers:
-      - image: ingress-nginx-svc.kube-system.svc.bongladesch.com/docker-dev/plessme/backend
+      - name: backend
+        image: jcr.bongladesch.com/docker/plessme/backend:latest
         imagePullPolicy: IfNotPresent
-        name: plessme
         ports:
           - name: http
             protocol: TCP

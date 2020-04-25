@@ -2,15 +2,37 @@ apiVersion: v1
 kind: Pod
 metadata:
   labels:
-    repository: plessme-backend
+    project: plessme
+    repository: backend
 spec:
+  restartPolicy: Never
+  hostAliases:
+  - ip: "192.168.0.100"
+    hostnames:
+    - "jcr.bongladesch.com"
   serviceAccountName: jenkins-sa
   containers:
   - name: buildpipeline
-    image: jcr.bongladesch.com/docker/stack/buildpipeline:0.7.0
+    image: jcr.bongladesch.com/docker/stack/buildpipeline:0.11.0
     imagePullPolicy: Always
+    env:
+    - name: DOCKER_HOST
+      value: tcp://localhost:2375
     command:
     - cat
+    tty: true
+  - name: docker
+    image: jcr.bongladesch.com/docker/docker:19.03.8-dind
+    imagePullPolicy: IfNotPresent
+    env:
+    - name: DOCKER_TLS_CERTDIR
+      value: ""
+    securityContext:
+      privileged: true
+    ports:
+    - name: socket
+      containerPort: 2375
+    args: ["--insecure-registry", "jcr.bongladesch.com"]
     tty: true
   - name: newman
     image: postman/newman:5.0.0-ubuntu

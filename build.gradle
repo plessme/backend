@@ -1,7 +1,8 @@
 plugins {
     id 'java'
     id 'io.quarkus'
-    id "com.diffplug.gradle.spotless" version "3.28.1"
+    id 'org.ajoberstar.grgit' version '4.0.2'
+    id 'com.diffplug.gradle.spotless' version '3.28.1'
     id 'com.cosminpolifronie.gradle.plantuml' version '1.6.0'
 }
 
@@ -78,4 +79,48 @@ javadoc {
 plantUml {
     render input: 'docs/diagrams/src/usecase.puml', output: 'docs/diagrams/out/usecase.png', format: 'png', withMetadata: false
     render input: 'docs/diagrams/src/scenario-uploadDocument.puml', output: 'docs/diagrams/out/scenario-uploadDocument.png', format: 'png', withMetadata: false
+}
+
+task createTag {
+    doLast {
+        grgit.tag.add {
+            name = version
+        }
+    }
+}
+
+task pushTag {
+    dependsOn createTag
+    doLast {
+        grgit.push {
+            tags = true
+        }
+    }
+}
+
+task createRelease() {
+    dependsOn pushTag
+    doLast {
+        // Create changelog from commits
+        def logs = grgit.log()
+        def releaseNotes = "### Release of PlessMe Backend in version ${version}\\n"
+        for (commit in logs) {
+            releaseNotes += '* ' + commit.fullMessage
+        }
+        releaseNotes = releaseNotes.replace("\n", "\\n").replace("\"", "'")
+        // create release using Githubs rest API
+        def post = new URL(githubApiUrl).openConnection()
+        def userCredentials = "${gitUser}:${gitPassword}"
+        def basicAuth = 'Basic ' + new String(Base64.getEncoder().encode(userCredentials.getBytes()))
+        def body = '{"tag_name":"' + version + '","target_commitish":"master","name":"' + version + '","body":"' + releaseNotes + '","draft":false,"prerelease":false}'
+        post.setRequestMethod("POST")
+        post.setDoOutput(true)
+        post.setRequestProperty("Authorization", basicAuth)
+        post.setRequestProperty("Content-Type", "application/json")
+        post.getOutputStream().write(body.getBytes("UTF-8"))
+        def postRC = post.getResponseCode()
+        if(postRC >= 400) {
+            throw new GradleException('Github API responds with error code.')
+        }
+    }
 }

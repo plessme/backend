@@ -1,25 +1,6 @@
-apiVersion: skaffold/v2alpha4
 kind: Config
 metadata:
-  name: plessme
-build:
-  tagPolicy:
-    envTemplate:
-      template: "{{.IMAGE_NAME}}:{{.VERSION}}"
-  artifacts:
-  - image: ingress-nginx-svc.kube-system.svc.bongladesch.com/docker-rel/plessme/backend
-    context: .
-    kaniko:
-      dockerfile: src/main/docker/Dockerfile
-      skipTLS: True
-  - image: ingress-nginx-svc.kube-system.svc.bongladesch.com/docker-rel/plessme/backend-docs
-    context: .
-    kaniko:
-      dockerfile: src/main/docker/Dockerfile.docs
-      skipTLS: True
-  cluster:
-    namespace: build
-    pullSecretName: regcred-dev
+  name: plessme-backend
 deploy:
   kustomize:
     paths: ["src/main/kustomize/integration"]
