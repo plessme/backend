@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'io.quarkus'
+    id "org.sonarqube" version "2.7"
     id 'org.ajoberstar.grgit' version '4.0.2'
     id 'com.diffplug.gradle.spotless' version '3.28.1'
     id 'com.cosminpolifronie.gradle.plantuml' version '1.6.0'

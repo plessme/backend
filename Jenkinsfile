@@ -29,7 +29,6 @@ pipeline {
     stage('Prepare Environment') {
       steps {
         withCredentials([
-          usernamePassword(credentialsId: 'git-user', usernameVariable: 'GRGIT_USER', passwordVariable: 'GRGIT_PASS'),
           usernamePassword(credentialsId: 'artifactory-user', usernameVariable: 'ARTIFACTORY_USER', passwordVariable: 'ARTIFACTORY_PASSWORD')
         ]) {
           container('buildpipeline') {
@@ -45,44 +44,55 @@ pipeline {
         }
       }
     }
-    stage('Java') {
+    stage('Code Validation') {
       parallel {
-        stage('Check Code Format') {
+        stage('Check Code Format [Spotless]') {
           steps {
             container('buildpipeline') {
               sh "jfrog rt gradle --build-name=${BUILD_NAME} --build-number=${BUILD_NUMBER} -Porg.gradle.parallel=true spotlessCheck"
             }
           }
         }
-        stage('Unit Tests') {
+        stage('Unit Tests [JUnit]') {
           steps {
             container('buildpipeline') {
               sh "jfrog rt gradle --build-name=${BUILD_NAME} --build-number=${BUILD_NUMBER} -Porg.gradle.parallel=true test"
             }
           }
         }
-        stage('Javadocs with UML Classes') {
+        stage('Check cyclic code dependencies [Javadoc & UML]') {
           steps {
             container('buildpipeline') {
               sh "jfrog rt gradle --build-name=${BUILD_NAME} --build-number=${BUILD_NUMBER} -Porg.gradle.parallel=true -Pversion=${VERSION} javadoc"
             }
           }
         }
-        stage('Build Native Java Image') {
-          steps {
-            container('buildpipeline') {
-              sh "jfrog rt gradle --build-name=${BUILD_NAME} --build-number=${BUILD_NUMBER} -Porg.gradle.parallel=true -Pversion=${VERSION} buildNative"
-            }
-          }
-          post {
-            success {
-              archiveArtifacts artifacts: "build/plessme-backend-${VERSION}-runner", fingerprint: true
-            }
+      }
+    }
+    stage('Static Code Analysis [Sonarqube]') {
+      steps {
+        withCredentials([
+          string(credentialsId: 'sonar-backend-secret', variable: 'SONAR_SECRET'),
+        ]) {
+          container('buildpipeline') {
+            sh "jfrog rt gradle --build-name=${BUILD_NAME} --build-number=${BUILD_NUMBER} -Porg.gradle.parallel=true -Pversion=${VERSION} -Psonar.login=${SONAR_SECRET} sonarqube"
           }
         }
       }
     }
-    stage('Publish Native Java Image') {
+    stage('Build Native Java Image [Quarkus]') {
+      steps {
+        container('buildpipeline') {
+          sh "jfrog rt gradle --build-name=${BUILD_NAME} --build-number=${BUILD_NUMBER} -Porg.gradle.parallel=true -Pversion=${VERSION} buildNative"
+        }
+      }
+      post {
+        success {
+          archiveArtifacts artifacts: "build/plessme-backend-${VERSION}-runner", fingerprint: true
+        }
+      }
+    }
+    stage('Publish Native Java Image [Artifactory]') {
       when {
         anyOf {
           branch 'master'
@@ -96,7 +106,7 @@ pipeline {
         }
       }
     }
-    stage('Build Docker Image') {
+    stage('Build Docker Image [Docker]') {
       steps {
         container('buildpipeline') {
           sh "jfrog rt docker-pull ${DOCKER_URL}/ubuntu:18.04 docker --build-name=${BUILD_NAME} --build-number=${BUILD_NUMBER}"
@@ -106,14 +116,14 @@ pipeline {
         }
       }
     }
-    stage('Test Docker Image') {
+    stage('Test Docker Image [Container-Structure-Tests]') {
       steps {
         container('buildpipeline') {
           sh "container-structure-test test --image ${DOCKER_URL}-${REPO_NAME}/plessme/backend:${VERSION} --config src/test/docker/backend-tests.yaml"
         }
       }
     }
-    stage('Push Docker Image') {
+    stage('Push Docker Image [Artifactory]') {
       steps {
         container('buildpipeline') {
           sh "jfrog rt docker-push ${DOCKER_URL}-${REPO_NAME}/plessme/backend:${VERSION} docker-${REPO_NAME} --build-name=${BUILD_NAME} --build-number=${BUILD_NUMBER}"
@@ -121,7 +131,7 @@ pipeline {
         }
       }
     }
-    stage('Deploy for Full API Tests') {
+    stage('Deploy for Full API Tests [Skaffold & Kustomize]') {
       steps {
         container('buildpipeline') {
           dir("${WORKSPACE}/src/main/kustomize/build") {
@@ -131,14 +141,14 @@ pipeline {
         }
       }
     }
-    stage('Execute Full API Tests') {
+    stage('Execute Full API Tests [Newman]') {
       steps {
         container('newman') {
           sh 'newman run src/test/api/users-api-test-collection.json --environment="src/test/api/api-test-build-env.json" --reporters junit --reporter-junit-export="build/test-results/test/newman-report.xml" --timeout 5000 --verbose'
         }
       }
     }
-    stage('Deploy to Environment') {
+    stage('Deploy to Environment [Skaffold & Kustomize]') {
       when { 
         anyOf {
           branch 'master'
@@ -156,7 +166,7 @@ pipeline {
         }
       }
     }
-    stage('Create Github Release') {
+    stage('Create Github Release [Gradle]') {
       when {
         anyOf {
           branch 'master'
@@ -164,8 +174,12 @@ pipeline {
         }
       }
       steps {
-        container('buildpipeline') {
-          sh "jfrog rt gradle --build-name=${BUILD_NAME} --build-number=${BUILD_NUMBER} -Porg.gradle.parallel=true -Pversion=${VERSION} -PgitUser=${GRGIT_USER} -PgitPassword=${GRGIT_PASS} createRelease"
+        withCredentials([
+          usernamePassword(credentialsId: 'git-user', usernameVariable: 'GRGIT_USER', passwordVariable: 'GRGIT_PASS')
+        ]) {
+          container('buildpipeline') {
+            sh "jfrog rt gradle --build-name=${BUILD_NAME} --build-number=${BUILD_NUMBER} -Porg.gradle.parallel=true -Pversion=${VERSION} -PgitUser=${GRGIT_USER} -PgitPassword=${GRGIT_PASS} createRelease"
+          }
         }
       }
     }
