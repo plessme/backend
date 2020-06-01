@@ -99,12 +99,56 @@ public class TestCreateUser {
         assertTrue(actualMessage.contains(expectedMessage));
     }
 
-    /** Create a user with invalid user data (email is null) Expect a UserValidationException. */
+    /** Create a user with invalid user data (null as password) Expect a UserValidationException. */
+    @Test
+    public void testInvalidUserNullPassword() {
+        // Create user object
+        UserBuilder builder = new UserBuilder();
+        builder.email("me@test.com").password(null).firstName("my").lastName("name");
+        // Create user account
+        UCreateUser createUserAccount =
+                new UCreateUser(logger, generator, userRepository, identityProvider, messageSender);
+        Exception exception =
+                assertThrows(
+                        UserValidationException.class,
+                        () -> {
+                            createUserAccount.create(builder.build());
+                        });
+        // Assert statements
+        String expectedMessage = "Provided password is null or emtpy.";
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    /**
+    * Create a user with invalid user data (email is not passed) Expect a UserValidationException.
+    */
     @Test
     public void testInvalidUserEmptyEmail() {
         // Create user object
         UserBuilder builder = new UserBuilder();
-        builder.password("password").firstName("my").lastName("name");
+        builder.email("").password("password").firstName("my").lastName("name");
+        // Create user account
+        UCreateUser createUserAccount =
+                new UCreateUser(logger, generator, userRepository, identityProvider, messageSender);
+        Exception exception =
+                assertThrows(
+                        UserValidationException.class,
+                        () -> {
+                            createUserAccount.create(builder.build());
+                        });
+        // Assert statements
+        String expectedMessage = "Provided e-mail address is null or emtpy.";
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    /** Create a user with invalid user data (email is null) Expect a UserValidationException. */
+    @Test
+    public void testInvalidUserNullEmail() {
+        // Create user object
+        UserBuilder builder = new UserBuilder();
+        builder.email(null).password("password").firstName("my").lastName("name");
         // Create user account
         UCreateUser createUserAccount =
                 new UCreateUser(logger, generator, userRepository, identityProvider, messageSender);

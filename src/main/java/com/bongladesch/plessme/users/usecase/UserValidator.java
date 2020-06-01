@@ -5,6 +5,8 @@ import com.bongladesch.plessme.users.entity.User;
 /** UserValidator validates a user object regarding all mandatory fields. */
 public class UserValidator {
 
+    private UserValidator() {}
+
     /**
     * Validates if the users e-mail address and password are not null or emtpy.
     *
