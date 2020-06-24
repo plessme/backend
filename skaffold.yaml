@@ -17,10 +17,10 @@ build:
       - 'gradle.properties'
       - 'src/**/*.java'
       - 'src/**/*.properties'
-test:
-  - image: jcr.bongladesch.com/docker-dev/plessme/backend-dev
-    structureTests:
-      - src/test/docker/*
+# test:
+#   - image: jcr.bongladesch.com/docker-dev/plessme/backend-dev
+#     structureTests:
+#       - src/test/docker/*
 deploy:
   kustomize:
     paths: ["src/main/kustomize/dev"]

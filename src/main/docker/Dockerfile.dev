@@ -1,4 +1,4 @@
-FROM jcr.bongladesch.com/docker/stack/buildpipeline:0.8.0
+FROM jcr.bongladesch.com/docker/stack/buildpipeline:0.12.0
 COPY ./build.gradle /home/quarkus/build.gradle
 COPY ./settings.gradle /home/quarkus/settings.gradle
 COPY ./gradle.properties /home/quarkus/gradle.properties
