@@ -3,18 +3,12 @@ plugins {
     id 'jacoco'
     id 'io.quarkus'
     id "org.sonarqube" version "2.8"
-    id 'org.ajoberstar.grgit' version '4.0.2'
-    id 'com.diffplug.gradle.spotless' version '3.28.1'
-    id 'com.cosminpolifronie.gradle.plantuml' version '1.6.0'
+    id 'com.diffplug.spotless' version '5.9.0'
 }
 
 repositories {
      mavenLocal()
      mavenCentral()
-}
-
-configurations {
-    umlDoclet
 }
 
 dependencies {
@@ -28,17 +22,20 @@ dependencies {
     implementation 'io.quarkus:quarkus-oidc'
 
     testImplementation 'io.quarkus:quarkus-junit5'
-
-    umlDoclet "nl.talsmasoftware:umldoclet:2.0.7"
 }
 
 compileJava {
+    options.encoding = 'UTF-8'
     options.compilerArgs << '-parameters'
 }
 
+compileTestJava {
+    options.encoding = 'UTF-8'
+}
+
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 }
 
 test.finalizedBy jacocoTestReport
@@ -51,10 +48,6 @@ jacocoTestReport {
     reports {
         xml.enabled true
     }
-}
-
-buildNative {
-    enableHttpUrlHandler = true
 }
 
 spotless {
@@ -78,63 +71,5 @@ spotless {
     freshmark {
         target 'README.md'
         propertiesFile('gradle.properties')
-    }
-}
-
-javadoc {
-    source = sourceSets.main.allJava
-    options.docletpath = configurations.umlDoclet.files.asType(List)
-    options.doclet = "nl.talsmasoftware.umldoclet.UMLDoclet"
-    options.addStringOption "umlImageDirectory", "docs/diagrams/out/umldoc.png"
-    options.addStringOption "umlImageFormat", "png"
-    options.addStringOption "failOnCyclicPackageDependencies", "true"
-}
-
-plantUml {
-    render input: 'docs/diagrams/src/usecase.puml', output: 'docs/diagrams/out/usecase.png', format: 'png', withMetadata: false
-    render input: 'docs/diagrams/src/scenario-uploadDocument.puml', output: 'docs/diagrams/out/scenario-uploadDocument.png', format: 'png', withMetadata: false
-}
-
-task createTag {
-    doLast {
-        grgit.tag.add {
-            name = version
-        }
-    }
-}
-
-task pushTag {
-    dependsOn createTag
-    doLast {
-        grgit.push {
-            tags = true
-        }
-    }
-}
-
-task createRelease() {
-    dependsOn pushTag
-    doLast {
-        // Create changelog from commits
-        def logs = grgit.log()
-        def releaseNotes = "### Release of PlessMe Backend in version ${version}\\n"
-        for (commit in logs) {
-            releaseNotes += '* ' + commit.fullMessage
-        }
-        releaseNotes = releaseNotes.replace("\n", "\\n").replace("\"", "'")
-        // create release using Githubs rest API
-        def post = new URL(githubApiUrl).openConnection()
-        def userCredentials = "${gitUser}:${gitPassword}"
-        def basicAuth = 'Basic ' + new String(Base64.getEncoder().encode(userCredentials.getBytes()))
-        def body = '{"tag_name":"' + version + '","target_commitish":"master","name":"' + version + '","body":"' + releaseNotes + '","draft":false,"prerelease":false}'
-        post.setRequestMethod("POST")
-        post.setDoOutput(true)
-        post.setRequestProperty("Authorization", basicAuth)
-        post.setRequestProperty("Content-Type", "application/json")
-        post.getOutputStream().write(body.getBytes("UTF-8"))
-        def postRC = post.getResponseCode()
-        if(postRC >= 400) {
-            throw new GradleException('Github API responds with error code.')
-        }
     }
 }
