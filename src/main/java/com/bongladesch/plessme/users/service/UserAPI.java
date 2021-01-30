@@ -1,15 +1,18 @@
-package com.bongladesch.plessme.users.controller.jaxrs;
+package com.bongladesch.plessme.users.service;
 
 import com.bongladesch.plessme.common.usecase.IGenerator;
 import com.bongladesch.plessme.common.usecase.ILogger;
 import com.bongladesch.plessme.users.entity.User;
 import com.bongladesch.plessme.users.entity.User.UserBuilder;
+import com.bongladesch.plessme.users.service.json.UserJSON;
 import com.bongladesch.plessme.users.usecase.IIdentityProvider;
 import com.bongladesch.plessme.users.usecase.IMessageSender;
 import com.bongladesch.plessme.users.usecase.IUserRepository;
 import com.bongladesch.plessme.users.usecase.UCreateUser;
 import com.bongladesch.plessme.users.usecase.UserAlreadyExistsException;
 import com.bongladesch.plessme.users.usecase.UserValidationException;
+
+import io.quarkus.oidc.UserInfo;
 import io.quarkus.security.identity.SecurityIdentity;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
@@ -32,6 +35,7 @@ import org.jboss.resteasy.annotations.cache.NoCache;
 public class UserAPI {
 
     private SecurityIdentity identity;
+    private UserInfo userInfo;
     private ILogger logger;
     private IGenerator generator;
     private IUserRepository userRepository;
@@ -42,6 +46,7 @@ public class UserAPI {
     * Constructor for CDI.
     *
     * @param identity request identity
+    * @param userInfo user data of identity
     * @param logger logger used by the API and usecases
     * @param generator generator to create UUID etc.
     * @param userRepository user repository dependency
@@ -51,12 +56,14 @@ public class UserAPI {
     @Inject
     public UserAPI(
             SecurityIdentity identity,
+            UserInfo userInfo,
             ILogger logger,
             IGenerator generator,
             IUserRepository userRepository,
             IIdentityProvider identityProvider,
             IMessageSender messageSender) {
         this.identity = identity;
+        this.userInfo = userInfo;
         this.logger = logger;
         this.generator = generator;
         this.userRepository = userRepository;
@@ -106,18 +113,6 @@ public class UserAPI {
     @Produces(MediaType.APPLICATION_JSON)
     @NoCache
     public Response hello() {
-        // Principal principal = identity.getPrincipal();
-        // if(principal instanceof KeycloakPrincipal) {
-        //     logger.info("Before cast");
-        //     KeycloakPrincipal<KeycloakSecurityContext> keycloakPrincipal =
-        // (KeycloakPrincipal<KeycloakSecurityContext>) identity.getPrincipal();
-        //     logger.info("Keycloak");
-        // } else {
-        //     logger.info("Not Keycloak");
-        // }
-        // String idToken = principal.getKeycloakSecurityContext().getIdTokenString();
-        // logger.info("Keycloak ID: " + idToken);
-        logger.info("Attributes size: " + identity.getAttributes().size());
-        return Response.ok("{\"hello\":\"" + identity.getPrincipal().getName() + "\"}").build();
+        return Response.ok("{\"user\":\"" + identity.getPrincipal().getName() + "\",\"id\": \"" + userInfo.getString("plessmeid") + "\"}").build();
     }
 }
