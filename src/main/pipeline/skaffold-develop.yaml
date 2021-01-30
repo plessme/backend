@@ -1,7 +1,0 @@
-apiVersion: skaffold/v2alpha4
-kind: Config
-metadata:
-  name: plessme-backend
-deploy:
-  kustomize:
-    paths: ["src/main/kustomize/develop"]

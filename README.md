@@ -29,24 +29,13 @@ We highly recommend to install all SDKs (Java, Gradle etc.) with [SDKMAN](https:
 You need to setup all dependencies with Docker(-Compose) for local development:
 
 * MongoDB
-* MongoExpress (MongoDB GUI)
 * Keycloak
-* Postgres
 
 Start you dependencies for the backend by executing:
 
 ```bash
-docker-compose -f src/main/docker/docker-compose.yaml up
+docker-compose up
 ```
-
-### Prerequisites for remote Kubernetes development
-
-* Kubectl 1.15.4 or higher
-* Skaffold 1.7.0 or higher
-
-You need a Kubernetes cluster with following configured:
-
-<!-- TODO example to configure Kubernetes for remote development -->
 
 ### Running the application in dev mode locally
 
@@ -57,42 +46,6 @@ You can run the application with Quarkus in dev mode that enables live coding us
 ```
 
 **Use always the Gradle wrapper during development.**
-
-### Running the application in dev mode remote on Kubernetes
-
-You can run the application with Skaffold and Quarkus in dev mode that enables live coding on a remote Kubnerets cluster.
-
-```bash
-skaffold dev --tail
-```
-
-### Debug the application
-
-While developing in dev mode (quarkus & skaffold) the application listens to port 5005 for remote debugging.
-In order to provide remote debugging during Kubernetes remote developing there is an additional Kubernetes service
-placed at `src/main/kubernetes/backend` to map the debug port of the application within a node port to port 30000
-of any Kubernetes worker node.
-
-#### VS Code remote debugging
-
-If developing with Visual Studio Code you can simply use the build in debugger by placing a `launch.json` file in the `.vscode/`
-folder in the root of this project with the following content:
-
-```json
-{
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "type": "java",
-            "name": "Debug Remote (Attach)",
-            "projectName": "plessme-backend",
-            "request": "attach",
-            "hostName": "<k8s-worker-ip>",
-            "port": 30000
-        }
-    ]
-}
-```
 
 ### Packaging and running the application
 
@@ -164,28 +117,6 @@ To check if your code already corresponds to the desired format execute:
 ```
 
 This is also a good possibility to integrate code formatting into the CI/CD pipeline.
-
-## Versioning
-
-This project
-
-## Continuous Integration/Deployment
-
-This project is also prepared for CI/CD with:
-
-* Jenkins CI-Server
-* Jfrog-Container-Registry (JCR)
-* Github as SCM
-
-The pipeline configuration is described in the `Jenkinsfile`.
-
-<!-- Add more information about CI/CD process -->
-
-### Git-Branching modell
-
-### Versioning automation
-
-### Docker image creation with Kaniko
 
 ## Contributing
 

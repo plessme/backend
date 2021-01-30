@@ -1,7 +1,0 @@
-- op: add
-  path: /spec/template/spec/containers/0/env
-  value:
-  - name: QUARKUS_PROFILE
-    value: develop
-  - name: QUARKUS_OIDC_CONNECTION_DELAY
-    value: 100s

@@ -2,7 +2,7 @@ version: '3'
 services:
   keycloak:
     container_name: plessme-keycloak
-    image: jboss/keycloak:9.0.2
+    image: jboss/keycloak:12.0.2
     ports:
       - "8082:8080"
     environment:
@@ -10,10 +10,10 @@ services:
       KEYCLOAK_PASSWORD: keycloak
       KEYCLOAK_IMPORT: "/tmp/kc/plessme-realm.json -Dkeycloak.profile.feature.upload_scripts=enabled"
     volumes:
-      - ${PWD}/src/main/kustomize/base/keycloak/plessme-realm.json:/tmp/kc/plessme-realm.json
+      - ${PWD}/plessme-realm.json:/tmp/kc/plessme-realm.json
   mongo:
     container_name: plessme-mongo
-    image: mongo:4.2.5-bionic
+    image: mongo:4.2.12
     environment:
       MONGO_INITDB_ROOT_USERNAME: mongo
       MONGO_INITDB_ROOT_PASSWORD: mongo

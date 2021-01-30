@@ -1,4 +1,4 @@
-FROM jcr.bongladesch.com/docker/ubuntu:18.04
+FROM ubuntu:20.10
 COPY build/*-runner /app
 RUN chmod 750 /app
 EXPOSE 8080
