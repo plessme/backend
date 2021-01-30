@@ -9,7 +9,6 @@ import com.bongladesch.plessme.common.adapter.util.MockGenerator;
 import com.bongladesch.plessme.common.usecase.IGenerator;
 import com.bongladesch.plessme.users.adapter.database.MockUserRepository;
 import com.bongladesch.plessme.users.adapter.identity.MockIdentityProvider;
-import com.bongladesch.plessme.users.adapter.sender.MockMessageSender;
 import com.bongladesch.plessme.users.entity.User;
 import com.bongladesch.plessme.users.entity.User.UserBuilder;
 import org.junit.jupiter.api.Test;
@@ -21,7 +20,6 @@ public class TestCreateUser {
     private IGenerator generator;
     private MockUserRepository userRepository;
     private MockIdentityProvider identityProvider;
-    private MockMessageSender messageSender;
 
     private User sharedUser;
 
@@ -32,7 +30,6 @@ public class TestCreateUser {
         this.generator = new MockGenerator();
         this.userRepository = new MockUserRepository();
         this.identityProvider = new MockIdentityProvider();
-        this.messageSender = new MockMessageSender();
         // Shared valid user object to test creation with valid input
         UserBuilder builder = new UserBuilder();
         builder.email("me@test.com").password("password").firstName("my").lastName("name");
@@ -47,7 +44,7 @@ public class TestCreateUser {
     public void testCreateUser() {
         // Create user and execute usecase with injected mocks
         UCreateUser createUserAccount =
-                new UCreateUser(logger, generator, userRepository, identityProvider, messageSender);
+                new UCreateUser(logger, generator, userRepository, identityProvider);
         User user = createUserAccount.create(sharedUser);
         // Assert statements
         assertEquals(user.getId(), "UUID");
@@ -65,7 +62,7 @@ public class TestCreateUser {
         userRepository.alreadyExists();
         // Create user account
         UCreateUser createUserAccount =
-                new UCreateUser(logger, generator, userRepository, identityProvider, messageSender);
+                new UCreateUser(logger, generator, userRepository, identityProvider);
         Exception exception =
                 assertThrows(
                         UserAlreadyExistsException.class,
@@ -86,7 +83,7 @@ public class TestCreateUser {
         builder.email("me@test.com").password("").firstName("my").lastName("name");
         // Create user account
         UCreateUser createUserAccount =
-                new UCreateUser(logger, generator, userRepository, identityProvider, messageSender);
+                new UCreateUser(logger, generator, userRepository, identityProvider);
         Exception exception =
                 assertThrows(
                         UserValidationException.class,
@@ -107,7 +104,7 @@ public class TestCreateUser {
         builder.email("me@test.com").password(null).firstName("my").lastName("name");
         // Create user account
         UCreateUser createUserAccount =
-                new UCreateUser(logger, generator, userRepository, identityProvider, messageSender);
+                new UCreateUser(logger, generator, userRepository, identityProvider);
         Exception exception =
                 assertThrows(
                         UserValidationException.class,
@@ -130,7 +127,7 @@ public class TestCreateUser {
         builder.email("").password("password").firstName("my").lastName("name");
         // Create user account
         UCreateUser createUserAccount =
-                new UCreateUser(logger, generator, userRepository, identityProvider, messageSender);
+                new UCreateUser(logger, generator, userRepository, identityProvider);
         Exception exception =
                 assertThrows(
                         UserValidationException.class,
@@ -151,7 +148,7 @@ public class TestCreateUser {
         builder.email(null).password("password").firstName("my").lastName("name");
         // Create user account
         UCreateUser createUserAccount =
-                new UCreateUser(logger, generator, userRepository, identityProvider, messageSender);
+                new UCreateUser(logger, generator, userRepository, identityProvider);
         Exception exception =
                 assertThrows(
                         UserValidationException.class,

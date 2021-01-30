@@ -15,7 +15,6 @@ public final class UCreateUser {
     private final IGenerator generator;
     private final IUserRepository repository;
     private final IIdentityProvider identityProvider;
-    private final IMessageSender messageSender;
 
     /**
     * Constructor of the 'CreateUserAccount' usecase object. All runtime dependencies for this
@@ -25,19 +24,16 @@ public final class UCreateUser {
     * @param generator Generator interface to generate UUID and timetamp
     * @param logger Logging interface to log on different levels during the usecase process
     * @param identityProvider Interface to the identity provider to create login
-    * @param messageSender Interface to send messages to other components (async)
     */
     public UCreateUser(
             final ILogger logger,
             final IGenerator generator,
             final IUserRepository repository,
-            final IIdentityProvider identityProvider,
-            final IMessageSender messageSender) {
+            final IIdentityProvider identityProvider) {
         this.logger = logger;
         this.generator = generator;
         this.repository = repository;
         this.identityProvider = identityProvider;
-        this.messageSender = messageSender;
     }
 
     /**
@@ -75,8 +71,6 @@ public final class UCreateUser {
                         + user.getEmail()
                         + " added to identity provider with id: "
                         + user.getId());
-        /// Send a "user_created" event with ID as payload
-        messageSender.userCreated(user.getId());
         // Persist user data to database
         repository.create(user);
         logger.info("Created new valid user account with id: " + user.getId() + "in user repository");

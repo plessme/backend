@@ -6,12 +6,10 @@ import com.bongladesch.plessme.users.entity.User;
 import com.bongladesch.plessme.users.entity.User.UserBuilder;
 import com.bongladesch.plessme.users.service.json.UserJSON;
 import com.bongladesch.plessme.users.usecase.IIdentityProvider;
-import com.bongladesch.plessme.users.usecase.IMessageSender;
 import com.bongladesch.plessme.users.usecase.IUserRepository;
 import com.bongladesch.plessme.users.usecase.UCreateUser;
 import com.bongladesch.plessme.users.usecase.UserAlreadyExistsException;
 import com.bongladesch.plessme.users.usecase.UserValidationException;
-
 import io.quarkus.oidc.UserInfo;
 import io.quarkus.security.identity.SecurityIdentity;
 import javax.annotation.security.PermitAll;
@@ -32,7 +30,7 @@ import org.jboss.resteasy.annotations.cache.NoCache;
 * usecases for invalid input.
 */
 @Path("/users")
-public class UserAPI {
+public class UserService {
 
     private SecurityIdentity identity;
     private UserInfo userInfo;
@@ -40,7 +38,6 @@ public class UserAPI {
     private IGenerator generator;
     private IUserRepository userRepository;
     private IIdentityProvider identityProvider;
-    private IMessageSender messageSender;
 
     /**
     * Constructor for CDI.
@@ -51,24 +48,21 @@ public class UserAPI {
     * @param generator generator to create UUID etc.
     * @param userRepository user repository dependency
     * @param identityProvider identity provider dependency
-    * @param messageSender messaging dependency
     */
     @Inject
-    public UserAPI(
+    public UserService(
             SecurityIdentity identity,
             UserInfo userInfo,
             ILogger logger,
             IGenerator generator,
             IUserRepository userRepository,
-            IIdentityProvider identityProvider,
-            IMessageSender messageSender) {
+            IIdentityProvider identityProvider) {
         this.identity = identity;
         this.userInfo = userInfo;
         this.logger = logger;
         this.generator = generator;
         this.userRepository = userRepository;
         this.identityProvider = identityProvider;
-        this.messageSender = messageSender;
     }
 
     /**
@@ -85,7 +79,7 @@ public class UserAPI {
     public Response createUser(UserJSON userJSON) {
         // Inject dependencies to the usecase on creation
         UCreateUser createUserAccount =
-                new UCreateUser(logger, generator, userRepository, identityProvider, messageSender);
+                new UCreateUser(logger, generator, userRepository, identityProvider);
         // Transform input object to user object
         UserBuilder userBuilder = new UserBuilder();
         User user =
@@ -113,6 +107,12 @@ public class UserAPI {
     @Produces(MediaType.APPLICATION_JSON)
     @NoCache
     public Response hello() {
-        return Response.ok("{\"user\":\"" + identity.getPrincipal().getName() + "\",\"id\": \"" + userInfo.getString("plessmeid") + "\"}").build();
+        return Response.ok(
+                        "{\"user\":\""
+                                + identity.getPrincipal().getName()
+                                + "\",\"id\": \""
+                                + userInfo.getString("plessmeid")
+                                + "\"}")
+                .build();
     }
 }
