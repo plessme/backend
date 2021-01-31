@@ -9,6 +9,7 @@ public interface IIdentityProvider {
     * Create an enabled user with the necessary role to access plessme as "user".
     *
     * @param user input user data
+    * @return if creation successfull true, else false
     */
-    void createUser(User user);
+    boolean createUser(User user);
 }

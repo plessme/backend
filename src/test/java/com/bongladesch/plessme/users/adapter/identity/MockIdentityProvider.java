@@ -10,5 +10,7 @@ import javax.enterprise.context.ApplicationScoped;
 public class MockIdentityProvider extends KeycloakIdentityProvider {
 
     @Override
-    public void createUser(User user) {}
+    public boolean createUser(User user) {
+        return true;
+    }
 }

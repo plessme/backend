@@ -73,7 +73,7 @@ public final class UCreateUser {
                         + user.getId());
         // Persist user data to database
         repository.create(user);
-        logger.info("Created new valid user account with id: " + user.getId() + "in user repository");
+        logger.info("Created new valid user account with id: " + user.getId() + " in user repository");
         return user;
     }
 }
