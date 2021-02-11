@@ -8,8 +8,8 @@ import javax.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class MockIdentityProvider extends KeycloakIdentityProvider {
 
-    @Override
-    public boolean createUser(User user) {
-        return true;
-    }
+  @Override
+  public boolean createUser(User user) {
+    return true;
+  }
 }

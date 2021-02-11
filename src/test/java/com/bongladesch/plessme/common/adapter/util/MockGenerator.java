@@ -7,13 +7,13 @@ import javax.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class MockGenerator extends BasicGenerator {
 
-    @Override
-    public String generateId() {
-        return "UUID";
-    }
+  @Override
+  public String generateId() {
+    return "UUID";
+  }
 
-    @Override
-    public Long generateTimestamp() {
-        return 123L;
-    }
+  @Override
+  public Long generateTimestamp() {
+    return 123L;
+  }
 }

@@ -74,8 +74,6 @@ spotless {
     }
     java {
         googleJavaFormat()
-        indentWithTabs(2)
-        indentWithSpaces(4)
     }
     freshmark {
         target 'README.md'

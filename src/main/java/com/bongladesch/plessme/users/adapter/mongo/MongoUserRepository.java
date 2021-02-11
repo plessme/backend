@@ -7,49 +7,49 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 /**
-* MongoUserRepository is a concret implementation of IUserRepositry to manage user data in a
-* MongoDB database.
-*/
+ * MongoUserRepository is a concret implementation of IUserRepositry to manage user data in a
+ * MongoDB database.
+ */
 @ApplicationScoped
 public class MongoUserRepository implements IUserRepository {
 
-    private ILogger logger;
+  private ILogger logger;
 
-    /**
-    * Default CDI constructor.
-    *
-    * @param logger logger instance is injected
-    */
-    @Inject
-    public MongoUserRepository(ILogger logger) {
-        this.logger = logger;
-    }
+  /**
+   * Default CDI constructor.
+   *
+   * @param logger logger instance is injected
+   */
+  @Inject
+  public MongoUserRepository(ILogger logger) {
+    this.logger = logger;
+  }
 
-    /**
-    * Write a user initially to database by given user data.
-    *
-    * @param user user data to create the database entry from
-    */
-    @Override
-    public void create(User user) {
-        logger.debug("Persist the given user with id: " + user.getId() + " to MongoDB");
-        MongoUser mongoUser = new MongoUser(user);
-        mongoUser.persist();
-    }
+  /**
+   * Write a user initially to database by given user data.
+   *
+   * @param user user data to create the database entry from
+   */
+  @Override
+  public void create(User user) {
+    logger.debug("Persist the given user with id: " + user.getId() + " to MongoDB");
+    MongoUser mongoUser = new MongoUser(user);
+    mongoUser.persist();
+  }
 
-    /**
-    * Find a user by e-mail in database.
-    *
-    * @param email the email to search for the user
-    * @return user if found, null if not
-    */
-    @Override
-    public User findByEmail(String email) {
-        logger.debug("Find a user by given email: " + email + " in MongoDB");
-        MongoUser user = MongoUser.findByEmail(email);
-        if (user != null) {
-            return user.toUser();
-        }
-        return null;
+  /**
+   * Find a user by e-mail in database.
+   *
+   * @param email the email to search for the user
+   * @return user if found, null if not
+   */
+  @Override
+  public User findByEmail(String email) {
+    logger.debug("Find a user by given email: " + email + " in MongoDB");
+    MongoUser user = MongoUser.findByEmail(email);
+    if (user != null) {
+      return user.toUser();
     }
+    return null;
+  }
 }

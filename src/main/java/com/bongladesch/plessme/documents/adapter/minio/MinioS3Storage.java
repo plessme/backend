@@ -6,11 +6,11 @@ import javax.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class MinioS3Storage implements IStorage {
 
-    public boolean createUserStorage(String id) {
-        return true;
-    }
+  public boolean createUserStorage(String id) {
+    return true;
+  }
 
-    public boolean deleteUserStorage(String id) {
-        return true;
-    }
+  public boolean deleteUserStorage(String id) {
+    return true;
+  }
 }
