@@ -4,6 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import com.bongladesch.plessme.common.adapter.logging.JBossLogger;
 import com.bongladesch.plessme.common.adapter.util.MockGenerator;
 import com.bongladesch.plessme.common.usecase.IGenerator;
@@ -12,8 +15,6 @@ import com.bongladesch.plessme.users.adapter.keycloak.MockIdentityProvider;
 import com.bongladesch.plessme.users.adapter.mongo.MockUserRepository;
 import com.bongladesch.plessme.users.entity.User;
 import com.bongladesch.plessme.users.entity.User.UserBuilder;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 /*
  * Test implementation for usecase "CreateUser".

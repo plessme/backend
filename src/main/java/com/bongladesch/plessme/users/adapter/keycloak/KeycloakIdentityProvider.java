@@ -1,13 +1,12 @@
 package com.bongladesch.plessme.users.adapter.keycloak;
 
-import com.bongladesch.plessme.common.usecase.ILogger;
-import com.bongladesch.plessme.users.entity.User;
-import com.bongladesch.plessme.users.usecase.IIdentityProvider;
 import java.util.Arrays;
 import java.util.Collections;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
+
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.CreatedResponseUtil;
@@ -19,6 +18,10 @@ import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
+
+import com.bongladesch.plessme.common.usecase.ILogger;
+import com.bongladesch.plessme.users.entity.User;
+import com.bongladesch.plessme.users.usecase.IIdentityProvider;
 
 /**
  * KeycloakIdentityProvider is a Keycloak identity provider implementation of the plessme identity

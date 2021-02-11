@@ -1,5 +1,18 @@
 package com.bongladesch.plessme.users.service;
 
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
+import javax.inject.Inject;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import org.jboss.resteasy.annotations.cache.NoCache;
+
 import com.bongladesch.plessme.common.usecase.IGenerator;
 import com.bongladesch.plessme.common.usecase.ILogger;
 import com.bongladesch.plessme.users.entity.User;
@@ -11,17 +24,6 @@ import com.bongladesch.plessme.users.usecase.UCreateUser;
 import com.bongladesch.plessme.users.usecase.UserAlreadyExistsException;
 import com.bongladesch.plessme.users.usecase.UserValidationException;
 import io.quarkus.oidc.UserInfo;
-import javax.annotation.security.PermitAll;
-import javax.annotation.security.RolesAllowed;
-import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import org.jboss.resteasy.annotations.cache.NoCache;
 
 /**
  * UsersAPI implements a REST API with JAX-RS to address the requests to the "users" component to

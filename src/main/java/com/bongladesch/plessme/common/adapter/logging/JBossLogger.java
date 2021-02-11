@@ -1,8 +1,10 @@
 package com.bongladesch.plessme.common.adapter.logging;
 
-import com.bongladesch.plessme.common.usecase.ILogger;
 import javax.enterprise.context.ApplicationScoped;
+
 import org.jboss.logging.Logger;
+
+import com.bongladesch.plessme.common.usecase.ILogger;
 
 /**
  * JBossLogger is a concret implementation of the ILogger inteface which is used by the "usecase"

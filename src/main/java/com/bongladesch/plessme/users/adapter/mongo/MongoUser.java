@@ -1,11 +1,13 @@
 package com.bongladesch.plessme.users.adapter.mongo;
 
-import com.bongladesch.plessme.users.entity.User;
-import com.bongladesch.plessme.users.entity.User.UserBuilder;
-import io.quarkus.mongodb.panache.MongoEntity;
-import io.quarkus.mongodb.panache.PanacheMongoEntityBase;
 import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.codecs.pojo.annotations.BsonProperty;
+
+import com.bongladesch.plessme.users.entity.User;
+import com.bongladesch.plessme.users.entity.User.UserBuilder;
+
+import io.quarkus.mongodb.panache.MongoEntity;
+import io.quarkus.mongodb.panache.PanacheMongoEntityBase;
 
 /** MongoUser is a user representation object for Mongo Panache extension. */
 @MongoEntity(collection = "user")

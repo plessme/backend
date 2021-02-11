@@ -1,8 +1,10 @@
 package com.bongladesch.plessme.common.adapter.util;
 
-import com.bongladesch.plessme.common.usecase.IGenerator;
 import java.util.UUID;
+
 import javax.enterprise.context.ApplicationScoped;
+
+import com.bongladesch.plessme.common.usecase.IGenerator;
 
 /**
  * BasicGenerator is a basic, concret implementation of the IGenerator interface which is used by

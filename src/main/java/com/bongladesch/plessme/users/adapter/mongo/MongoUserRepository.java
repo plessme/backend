@@ -1,10 +1,11 @@
 package com.bongladesch.plessme.users.adapter.mongo;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+
 import com.bongladesch.plessme.common.usecase.ILogger;
 import com.bongladesch.plessme.users.entity.User;
 import com.bongladesch.plessme.users.usecase.IUserRepository;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 
 /**
  * MongoUserRepository is a concret implementation of IUserRepositry to manage user data in a

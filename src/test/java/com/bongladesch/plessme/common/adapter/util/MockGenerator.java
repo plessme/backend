@@ -1,7 +1,8 @@
 package com.bongladesch.plessme.common.adapter.util;
 
-import io.quarkus.test.Mock;
 import javax.enterprise.context.ApplicationScoped;
+
+import io.quarkus.test.Mock;
 
 @Mock
 @ApplicationScoped
