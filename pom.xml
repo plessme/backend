@@ -103,11 +103,25 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <version>${surefire-plugin.version}</version>
         <configuration>
+          <excludedGroups>integration</excludedGroups>
           <systemPropertyVariables>
             <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
             <maven.home>${maven.home}</maven.home>
           </systemPropertyVariables>
         </configuration>
+        <executions>
+          <execution>
+              <id>integration-tests</id>
+              <phase>integration-test</phase>
+              <goals>
+                  <goal>test</goal>
+              </goals>
+              <configuration>
+                  <excludedGroups>!integration</excludedGroups>
+                  <groups>integration</groups>
+              </configuration>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>com.diffplug.spotless</groupId>
