@@ -14,13 +14,13 @@ import org.junit.jupiter.api.Test;
 @Tag("integration")
 public class TestGetUserService {
 
-    /** Test getUser from OIDC user info */
-    @Test
-    @TestSecurity(
-            user = "tester@gmail.com",
-            roles = {"user"},
-            authorizationEnabled = false)
-    public void testGetUser() {
-        given().when().get("/users").then().statusCode(200).body(is("{\"id\":\"UUID\"}"));
-    }
+  /** Test getUser from OIDC user info */
+  @Test
+  @TestSecurity(
+      user = "tester@gmail.com",
+      roles = {"user"},
+      authorizationEnabled = false)
+  public void testGetUser() {
+    given().when().get("/users").then().statusCode(200).body(is("{\"id\":\"UUID\"}"));
+  }
 }

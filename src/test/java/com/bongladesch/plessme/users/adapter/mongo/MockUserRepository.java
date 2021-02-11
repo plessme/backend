@@ -1,10 +1,11 @@
 package com.bongladesch.plessme.users.adapter.mongo;
 
+import io.quarkus.test.Mock;
+
 import javax.enterprise.context.ApplicationScoped;
 
 import com.bongladesch.plessme.users.entity.User;
 import com.bongladesch.plessme.users.entity.User.UserBuilder;
-import io.quarkus.test.Mock;
 
 @Mock
 @ApplicationScoped

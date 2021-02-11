@@ -1,5 +1,7 @@
 package com.bongladesch.plessme.users.service;
 
+import io.quarkus.oidc.UserInfo;
+
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
@@ -23,7 +25,6 @@ import com.bongladesch.plessme.users.usecase.IUserRepository;
 import com.bongladesch.plessme.users.usecase.UCreateUser;
 import com.bongladesch.plessme.users.usecase.UserAlreadyExistsException;
 import com.bongladesch.plessme.users.usecase.UserValidationException;
-import io.quarkus.oidc.UserInfo;
 
 /**
  * UsersAPI implements a REST API with JAX-RS to address the requests to the "users" component to
