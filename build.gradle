@@ -21,6 +21,9 @@ dependencies {
     implementation 'io.quarkus:quarkus-oidc'
 
     testImplementation 'io.quarkus:quarkus-junit5'
+    testImplementation 'io.quarkus:quarkus-junit5-mockito'
+    testImplementation 'io.rest-assured:rest-assured'
+    testImplementation 'io.quarkus:quarkus-test-security'
 }
 
 compileJava {
@@ -35,6 +38,13 @@ compileTestJava {
 java {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
+}
+
+test {
+    testLogging {
+        events "passed", "skipped", "failed"
+        showStandardStreams true
+    }
 }
 
 test.finalizedBy jacocoTestReport

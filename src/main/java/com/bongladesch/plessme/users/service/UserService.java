@@ -11,7 +11,6 @@ import com.bongladesch.plessme.users.usecase.UCreateUser;
 import com.bongladesch.plessme.users.usecase.UserAlreadyExistsException;
 import com.bongladesch.plessme.users.usecase.UserValidationException;
 import io.quarkus.oidc.UserInfo;
-import io.quarkus.security.identity.SecurityIdentity;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
@@ -32,7 +31,6 @@ import org.jboss.resteasy.annotations.cache.NoCache;
 @Path("/users")
 public class UserService {
 
-    private SecurityIdentity identity;
     private UserInfo userInfo;
     private ILogger logger;
     private IGenerator generator;
@@ -42,7 +40,6 @@ public class UserService {
     /**
     * Constructor for CDI.
     *
-    * @param identity request identity
     * @param userInfo user data of identity
     * @param logger logger used by the API and usecases
     * @param generator generator to create UUID etc.
@@ -51,13 +48,11 @@ public class UserService {
     */
     @Inject
     public UserService(
-            SecurityIdentity identity,
             UserInfo userInfo,
             ILogger logger,
             IGenerator generator,
             IUserRepository userRepository,
             IIdentityProvider identityProvider) {
-        this.identity = identity;
         this.userInfo = userInfo;
         this.logger = logger;
         this.generator = generator;
@@ -99,20 +94,14 @@ public class UserService {
                 return Response.status(400).build();
             }
         }
-        return Response.ok("{\"id\":\"" + user.getId() + "\"}").build();
+        return Response.status(201).entity("{\"id\":\"" + user.getId() + "\"}").build();
     }
 
     @GET
     @RolesAllowed("user")
     @Produces(MediaType.APPLICATION_JSON)
     @NoCache
-    public Response hello() {
-        return Response.ok(
-                        "{\"user\":\""
-                                + identity.getPrincipal().getName()
-                                + "\",\"id\": \""
-                                + userInfo.getString("plessmeid")
-                                + "\"}")
-                .build();
+    public Response getUser() {
+        return Response.ok("{\"id\":\"" + userInfo.getString("plessmeid") + "\"}").build();
     }
 }

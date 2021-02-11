@@ -86,11 +86,11 @@ public class KeycloakIdentityProvider implements IIdentityProvider {
     }
 
     /**
-     * Transforms an User object to UserRepresentation object
-     * including credentails.
-     * @param user User object to create UserRepresentation from.
-     * @return Created UserRepresentation object.
-     */
+    * Transforms an User object to UserRepresentation object including credentails.
+    *
+    * @param user User object to create UserRepresentation from.
+    * @return Created UserRepresentation object.
+    */
     private UserRepresentation userToUserRepresentation(User user) {
         // Create user representation object
         UserRepresentation userRepresentation = new UserRepresentation();
@@ -112,10 +112,11 @@ public class KeycloakIdentityProvider implements IIdentityProvider {
     }
 
     /**
-     * Add the realm role "user" to the user with provided ID.
-     * @param keycloak Keycloak client instance
-     * @param userId ID of the user to add the role "user"
-     */
+    * Add the realm role "user" to the user with provided ID.
+    *
+    * @param keycloak Keycloak client instance
+    * @param userId ID of the user to add the role "user"
+    */
     private void addUserRole(Keycloak keycloak, String userId) {
         RealmResource realmResource = keycloak.realm(realm);
         UsersResource usersRessource = realmResource.users();

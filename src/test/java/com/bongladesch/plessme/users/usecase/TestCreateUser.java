@@ -7,33 +7,81 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.bongladesch.plessme.common.adapter.logging.JBossLogger;
 import com.bongladesch.plessme.common.adapter.util.MockGenerator;
 import com.bongladesch.plessme.common.usecase.IGenerator;
-import com.bongladesch.plessme.users.adapter.database.MockUserRepository;
-import com.bongladesch.plessme.users.adapter.identity.MockIdentityProvider;
+import com.bongladesch.plessme.common.usecase.ILogger;
+import com.bongladesch.plessme.users.adapter.keycloak.MockIdentityProvider;
+import com.bongladesch.plessme.users.adapter.mongo.MockUserRepository;
 import com.bongladesch.plessme.users.entity.User;
 import com.bongladesch.plessme.users.entity.User.UserBuilder;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-/** Test implementation for usecase "CreateUser". */
+/*
+* Test implementation for usecase "CreateUser".
+*/
+// @QuarkusTest
 public class TestCreateUser {
 
-    private JBossLogger logger;
-    private IGenerator generator;
+    // Usecase dependencies
+    private ILogger logger;
     private MockUserRepository userRepository;
-    private MockIdentityProvider identityProvider;
+    private IIdentityProvider identityProvider;
+    private IGenerator generator;
 
-    private User sharedUser;
+    // Test objects
+    private UCreateUser createUserUsecase;
+    private User validUser;
+    private User emptyPassUser;
+    private User nullPassUser;
+    private User emptyMailUser;
+    private User nullMailUser;
 
-    /** Setup test environment by creating dependencies and mocks to inject on test. */
+    // Initialize test data
     public TestCreateUser() {
-        // Creation of dependencies and mocks
-        this.logger = new JBossLogger();
-        this.generator = new MockGenerator();
-        this.userRepository = new MockUserRepository();
-        this.identityProvider = new MockIdentityProvider();
-        // Shared valid user object to test creation with valid input
-        UserBuilder builder = new UserBuilder();
-        builder.email("me@test.com").password("password").firstName("my").lastName("name");
-        this.sharedUser = builder.build();
+        validUser =
+                new UserBuilder()
+                        .email("tester@gmail.com")
+                        .password("password")
+                        .firstName("tester")
+                        .lastName("tester")
+                        .build();
+        emptyPassUser =
+                new UserBuilder()
+                        .email("tester@gmail.com")
+                        .password("")
+                        .firstName("tester")
+                        .lastName("tester")
+                        .build();
+        nullPassUser =
+                new UserBuilder()
+                        .email("tester@gmail.com")
+                        .password(null)
+                        .firstName("tester")
+                        .lastName("tester")
+                        .build();
+        emptyMailUser =
+                new UserBuilder()
+                        .email("")
+                        .password("password")
+                        .firstName("tester")
+                        .lastName("tester")
+                        .build();
+        nullMailUser =
+                new UserBuilder()
+                        .email(null)
+                        .password("password")
+                        .firstName("tester")
+                        .lastName("tester")
+                        .build();
+    }
+
+    /** Setup clean usecase before eeach test. */
+    @BeforeEach
+    private void setup() {
+        logger = new JBossLogger();
+        userRepository = new MockUserRepository();
+        generator = new MockGenerator();
+        identityProvider = new MockIdentityProvider();
+        createUserUsecase = new UCreateUser(logger, generator, userRepository, identityProvider);
     }
 
     /**
@@ -42,79 +90,59 @@ public class TestCreateUser {
     */
     @Test
     public void testCreateUser() {
-        // Create user and execute usecase with injected mocks
-        UCreateUser createUserAccount =
-                new UCreateUser(logger, generator, userRepository, identityProvider);
-        User user = createUserAccount.create(sharedUser);
-        // Assert statements
+        // When
+        User user = createUserUsecase.create(validUser);
+        // Then
         assertEquals(user.getId(), "UUID");
         assertEquals(user.getCreated(), 123L);
-        assertEquals(user.getEmail(), "me@test.com");
+        assertEquals(user.getEmail(), "tester@gmail.com");
         assertEquals(user.getPassword(), "password");
-        assertEquals(user.getFirstName(), "my");
-        assertEquals(user.getLastName(), "name");
+        assertEquals(user.getFirstName(), "tester");
+        assertEquals(user.getLastName(), "tester");
     }
 
     /** Create an already existing user. Expected a "UserAlreadyExists" exception. */
     @Test
     public void testUserAlreadyExists() {
-        // Configure mock to simulate a already existing user account
+        // Given
         userRepository.alreadyExists();
-        // Create user account
-        UCreateUser createUserAccount =
-                new UCreateUser(logger, generator, userRepository, identityProvider);
+        // When
         Exception exception =
                 assertThrows(
                         UserAlreadyExistsException.class,
                         () -> {
-                            createUserAccount.create(sharedUser);
+                            createUserUsecase.create(validUser);
                         });
-        // Assert statements
-        String expectedMessage = "me@test.com";
-        String actualMessage = exception.getMessage();
-        assertTrue(actualMessage.contains(expectedMessage));
+        // Then
+        assertTrue(exception.getMessage().contains("tester@gmail.com"));
     }
 
     /** Create a user with invalid user data (empty password) Expect a UserValidationException. */
     @Test
     public void testInvalidUserNoPassword() {
-        // Create user object
-        UserBuilder builder = new UserBuilder();
-        builder.email("me@test.com").password("").firstName("my").lastName("name");
-        // Create user account
-        UCreateUser createUserAccount =
-                new UCreateUser(logger, generator, userRepository, identityProvider);
+        // When
         Exception exception =
                 assertThrows(
                         UserValidationException.class,
                         () -> {
-                            createUserAccount.create(builder.build());
+                            createUserUsecase.create(emptyPassUser);
                         });
-        // Assert statements
-        String expectedMessage = "Provided password is null or emtpy.";
-        String actualMessage = exception.getMessage();
-        assertTrue(actualMessage.contains(expectedMessage));
+        // Then
+        assertTrue(exception.getMessage().contains("Provided password is null or emtpy."));
     }
 
     /** Create a user with invalid user data (null as password) Expect a UserValidationException. */
     @Test
     public void testInvalidUserNullPassword() {
-        // Create user object
-        UserBuilder builder = new UserBuilder();
-        builder.email("me@test.com").password(null).firstName("my").lastName("name");
-        // Create user account
-        UCreateUser createUserAccount =
-                new UCreateUser(logger, generator, userRepository, identityProvider);
+        // When
         Exception exception =
                 assertThrows(
                         UserValidationException.class,
                         () -> {
-                            createUserAccount.create(builder.build());
+                            createUserUsecase.create(nullPassUser);
                         });
-        // Assert statements
-        String expectedMessage = "Provided password is null or emtpy.";
-        String actualMessage = exception.getMessage();
-        assertTrue(actualMessage.contains(expectedMessage));
+        // Then
+        assertTrue(exception.getMessage().contains("Provided password is null or emtpy."));
     }
 
     /**
@@ -122,42 +150,28 @@ public class TestCreateUser {
     */
     @Test
     public void testInvalidUserEmptyEmail() {
-        // Create user object
-        UserBuilder builder = new UserBuilder();
-        builder.email("").password("password").firstName("my").lastName("name");
-        // Create user account
-        UCreateUser createUserAccount =
-                new UCreateUser(logger, generator, userRepository, identityProvider);
+        // When
         Exception exception =
                 assertThrows(
                         UserValidationException.class,
                         () -> {
-                            createUserAccount.create(builder.build());
+                            createUserUsecase.create(emptyMailUser);
                         });
-        // Assert statements
-        String expectedMessage = "Provided e-mail address is null or emtpy.";
-        String actualMessage = exception.getMessage();
-        assertTrue(actualMessage.contains(expectedMessage));
+        // Then
+        assertTrue(exception.getMessage().contains("Provided e-mail address is null or emtpy."));
     }
 
     /** Create a user with invalid user data (email is null) Expect a UserValidationException. */
     @Test
     public void testInvalidUserNullEmail() {
-        // Create user object
-        UserBuilder builder = new UserBuilder();
-        builder.email(null).password("password").firstName("my").lastName("name");
-        // Create user account
-        UCreateUser createUserAccount =
-                new UCreateUser(logger, generator, userRepository, identityProvider);
+        // When
         Exception exception =
                 assertThrows(
                         UserValidationException.class,
                         () -> {
-                            createUserAccount.create(builder.build());
+                            createUserUsecase.create(nullMailUser);
                         });
-        // Assert statements
-        String expectedMessage = "Provided e-mail address is null or emtpy.";
-        String actualMessage = exception.getMessage();
-        assertTrue(actualMessage.contains(expectedMessage));
+        // Then
+        assertTrue(exception.getMessage().contains("Provided e-mail address is null or emtpy."));
     }
 }
