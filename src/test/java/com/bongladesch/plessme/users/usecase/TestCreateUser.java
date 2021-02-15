@@ -3,30 +3,31 @@ package com.bongladesch.plessme.users.usecase;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import com.bongladesch.plessme.common.adapter.logging.JBossLogger;
-import com.bongladesch.plessme.common.adapter.util.MockGenerator;
+import com.bongladesch.plessme.common.adapter.util.BasicGenerator;
 import com.bongladesch.plessme.common.usecase.IGenerator;
 import com.bongladesch.plessme.common.usecase.ILogger;
-import com.bongladesch.plessme.users.adapter.keycloak.MockIdentityProvider;
-import com.bongladesch.plessme.users.adapter.mongo.MockUserRepository;
+import com.bongladesch.plessme.users.adapter.keycloak.KeycloakIdentityProvider;
+import com.bongladesch.plessme.users.adapter.mongo.MongoUserRepository;
 import com.bongladesch.plessme.users.entity.User;
 import com.bongladesch.plessme.users.entity.User.UserBuilder;
 
 /*
  * Test implementation for usecase "CreateUser".
  */
-// @QuarkusTest
 public class TestCreateUser {
 
   // Usecase dependencies
   private ILogger logger;
-  private MockUserRepository userRepository;
-  private IIdentityProvider identityProvider;
-  private IGenerator generator;
+  private IGenerator mockedGenerator;
+  private IUserRepository mockedUserRepository;
+  private IIdentityProvider mockedIdentityProvider;
 
   // Test objects
   private UCreateUser createUserUsecase;
@@ -79,10 +80,10 @@ public class TestCreateUser {
   @BeforeEach
   private void setup() {
     logger = new JBossLogger();
-    userRepository = new MockUserRepository();
-    generator = new MockGenerator();
-    identityProvider = new MockIdentityProvider();
-    createUserUsecase = new UCreateUser(logger, generator, userRepository, identityProvider);
+    mockedGenerator = Mockito.mock(BasicGenerator.class);
+    mockedUserRepository = Mockito.mock(MongoUserRepository.class);
+    mockedIdentityProvider = Mockito.mock(KeycloakIdentityProvider.class);
+    createUserUsecase = new UCreateUser(logger, mockedGenerator, mockedUserRepository, mockedIdentityProvider);
   }
 
   /**
@@ -91,6 +92,11 @@ public class TestCreateUser {
    */
   @Test
   public void testCreateUser() {
+    // Given
+    Mockito.when(mockedGenerator.generateId()).thenReturn("UUID");
+    Mockito.when(mockedGenerator.generateTimestamp()).thenReturn(123L);
+    Mockito.doNothing().when(mockedUserRepository).create(any(User.class));
+    Mockito.when(mockedIdentityProvider.createUser(any(User.class))).thenReturn(true);
     // When
     User user = createUserUsecase.create(validUser);
     // Then
@@ -106,7 +112,7 @@ public class TestCreateUser {
   @Test
   public void testUserAlreadyExists() {
     // Given
-    userRepository.alreadyExists();
+    Mockito.when(mockedUserRepository.findByEmail(any(String.class))).thenReturn(validUser);
     // When
     Exception exception =
         assertThrows(
