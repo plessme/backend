@@ -172,4 +172,13 @@ public class User {
   public String getLastName() {
     return this.lastName;
   }
+
+  @Override
+  public boolean equals(Object other) {
+    if (other instanceof User) {
+      User otherUser = (User) other;
+      if (this.getId().equals(otherUser.getId())) return true;
+    }
+    return false;
+  }
 }

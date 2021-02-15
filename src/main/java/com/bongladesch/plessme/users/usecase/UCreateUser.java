@@ -61,8 +61,7 @@ public final class UCreateUser {
         .email(userInput.getEmail())
         .password(userInput.getPassword())
         .firstName(userInput.getFirstName())
-        .lastName(userInput.getLastName())
-        .build();
+        .lastName(userInput.getLastName());
     User user = userBuilder.build();
     // Create login at identity provider
     identityProvider.createUser(user);

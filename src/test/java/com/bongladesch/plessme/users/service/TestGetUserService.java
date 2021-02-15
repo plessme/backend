@@ -18,8 +18,7 @@ public class TestGetUserService {
   @Test
   @TestSecurity(
       user = "tester@gmail.com",
-      roles = {"user"},
-      authorizationEnabled = false)
+      roles = {"user"})
   public void testGetUser() {
     given().when().get("/users").then().statusCode(200).body(is("{\"id\":\"UUID\"}"));
   }
