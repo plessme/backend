@@ -83,7 +83,8 @@ public class TestCreateUser {
     mockedGenerator = Mockito.mock(BasicGenerator.class);
     mockedUserRepository = Mockito.mock(MongoUserRepository.class);
     mockedIdentityProvider = Mockito.mock(KeycloakIdentityProvider.class);
-    createUserUsecase = new UCreateUser(logger, mockedGenerator, mockedUserRepository, mockedIdentityProvider);
+    createUserUsecase =
+        new UCreateUser(logger, mockedGenerator, mockedUserRepository, mockedIdentityProvider);
   }
 
   /**

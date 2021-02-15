@@ -2,9 +2,9 @@ package com.bongladesch.plessme.users.adapter.keycloak;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import javax.inject.Inject;
-
 import io.quarkus.test.junit.QuarkusTest;
+
+import javax.inject.Inject;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;

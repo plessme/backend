@@ -32,14 +32,14 @@ public class TestMongoUserRepository {
     this.generator = new BasicGenerator();
     // Initialize test data
     validUser =
-      new User.UserBuilder()
-        .id(generator.generateId())
-        .created(generator.generateTimestamp())
-        .email("tester@gmail.com")
-        .password("password")
-        .firstName("tester")
-        .lastName("tester")
-        .build();
+        new User.UserBuilder()
+            .id(generator.generateId())
+            .created(generator.generateTimestamp())
+            .email("tester@gmail.com")
+            .password("password")
+            .firstName("tester")
+            .lastName("tester")
+            .build();
   }
 
   /** Test creation of a user in MongoDB and checking of find method returns expected user */
