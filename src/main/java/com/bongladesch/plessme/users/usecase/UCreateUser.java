@@ -1,7 +1,8 @@
 package com.bongladesch.plessme.users.usecase;
 
+import org.jboss.logging.Logger;
+
 import com.bongladesch.plessme.common.usecase.IGenerator;
-import com.bongladesch.plessme.common.usecase.ILogger;
 import com.bongladesch.plessme.users.entity.User;
 import com.bongladesch.plessme.users.entity.User.UserBuilder;
 
@@ -11,7 +12,9 @@ import com.bongladesch.plessme.users.entity.User.UserBuilder;
  */
 public final class UCreateUser {
 
-  private final ILogger logger;
+  private static final Logger LOGGER = Logger.getLogger(UCreateUser.class);
+  ;
+
   private final IGenerator generator;
   private final IUserRepository repository;
   private final IIdentityProvider identityProvider;
@@ -22,15 +25,12 @@ public final class UCreateUser {
    *
    * @param repository Repository interface to manage the persistence of user account data
    * @param generator Generator interface to generate UUID and timetamp
-   * @param logger Logging interface to log on different levels during the usecase process
    * @param identityProvider Interface to the identity provider to create login
    */
   public UCreateUser(
-      final ILogger logger,
       final IGenerator generator,
       final IUserRepository repository,
       final IIdentityProvider identityProvider) {
-    this.logger = logger;
     this.generator = generator;
     this.repository = repository;
     this.identityProvider = identityProvider;
@@ -50,7 +50,7 @@ public final class UCreateUser {
     // Validate user input
     UserValidator.validateUser(userInput);
     if (repository.findByEmail(userInput.getEmail()) != null) {
-      logger.info("User with email-address " + userInput.getEmail() + " already exists");
+      LOGGER.info("User with email-address " + userInput.getEmail() + " already exists");
       throw new UserAlreadyExistsException(userInput.getEmail());
     }
     // Create new user object and add ID + creation timestamp
@@ -65,14 +65,14 @@ public final class UCreateUser {
     User user = userBuilder.build();
     // Create login at identity provider
     identityProvider.createUser(user);
-    logger.debug(
+    LOGGER.debug(
         "User with email "
             + user.getEmail()
             + " added to identity provider with id: "
             + user.getId());
     // Persist user data to database
     repository.create(user);
-    logger.info("Created new valid user account with id: " + user.getId() + " in user repository");
+    LOGGER.info("Created new valid user account with id: " + user.getId() + " in user repository");
     return user;
   }
 }

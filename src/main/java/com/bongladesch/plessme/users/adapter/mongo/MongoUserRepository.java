@@ -3,7 +3,8 @@ package com.bongladesch.plessme.users.adapter.mongo;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import com.bongladesch.plessme.common.usecase.ILogger;
+import org.jboss.logging.Logger;
+
 import com.bongladesch.plessme.users.entity.User;
 import com.bongladesch.plessme.users.usecase.IUserRepository;
 
@@ -14,7 +15,7 @@ import com.bongladesch.plessme.users.usecase.IUserRepository;
 @ApplicationScoped
 public class MongoUserRepository implements IUserRepository {
 
-  private ILogger logger;
+  private Logger logger;
 
   /**
    * Default CDI constructor.
@@ -22,7 +23,7 @@ public class MongoUserRepository implements IUserRepository {
    * @param logger logger instance is injected
    */
   @Inject
-  public MongoUserRepository(ILogger logger) {
+  public MongoUserRepository(Logger logger) {
     this.logger = logger;
   }
 

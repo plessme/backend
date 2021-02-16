@@ -5,9 +5,11 @@ import java.util.Collections;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.ws.rs.ProcessingException;
 import javax.ws.rs.core.Response;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.jboss.logging.Logger;
 import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.CreatedResponseUtil;
 import org.keycloak.admin.client.Keycloak;
@@ -19,7 +21,6 @@ import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 
-import com.bongladesch.plessme.common.usecase.ILogger;
 import com.bongladesch.plessme.users.entity.User;
 import com.bongladesch.plessme.users.usecase.IIdentityProvider;
 
@@ -50,7 +51,7 @@ public class KeycloakIdentityProvider implements IIdentityProvider {
   @ConfigProperty(name = "plessme.keycloak.client.secret")
   String clientSecret;
 
-  @Inject ILogger logger;
+  @Inject Logger logger;
 
   /**
    * Create an enabled user in Keycloak for OAuth2 implementation from a valid user entity. Realm
@@ -78,7 +79,8 @@ public class KeycloakIdentityProvider implements IIdentityProvider {
     try {
       UsersResource usersResource = keycloak.realm(realm).users();
       response = usersResource.create(userRepresentation);
-    } catch (javax.ws.rs.ProcessingException e) {
+    } catch (ProcessingException e) {
+      logger.debug(e);
       return false;
     }
     // Add "user" role to new created user

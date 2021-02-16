@@ -9,10 +9,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import com.bongladesch.plessme.common.adapter.logging.JBossLogger;
 import com.bongladesch.plessme.common.adapter.util.BasicGenerator;
 import com.bongladesch.plessme.common.usecase.IGenerator;
-import com.bongladesch.plessme.common.usecase.ILogger;
 import com.bongladesch.plessme.users.adapter.keycloak.KeycloakIdentityProvider;
 import com.bongladesch.plessme.users.adapter.mongo.MongoUserRepository;
 import com.bongladesch.plessme.users.entity.User;
@@ -24,7 +22,6 @@ import com.bongladesch.plessme.users.entity.User.UserBuilder;
 public class TestCreateUser {
 
   // Usecase dependencies
-  private ILogger logger;
   private IGenerator mockedGenerator;
   private IUserRepository mockedUserRepository;
   private IIdentityProvider mockedIdentityProvider;
@@ -79,12 +76,11 @@ public class TestCreateUser {
   /** Setup clean usecase before eeach test. */
   @BeforeEach
   private void setup() {
-    logger = new JBossLogger();
     mockedGenerator = Mockito.mock(BasicGenerator.class);
     mockedUserRepository = Mockito.mock(MongoUserRepository.class);
     mockedIdentityProvider = Mockito.mock(KeycloakIdentityProvider.class);
     createUserUsecase =
-        new UCreateUser(logger, mockedGenerator, mockedUserRepository, mockedIdentityProvider);
+        new UCreateUser(mockedGenerator, mockedUserRepository, mockedIdentityProvider);
   }
 
   /**

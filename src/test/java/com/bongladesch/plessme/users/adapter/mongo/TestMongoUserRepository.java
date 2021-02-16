@@ -8,11 +8,11 @@ import io.quarkus.test.junit.QuarkusTest;
 
 import javax.inject.Inject;
 
+import org.jboss.logging.Logger;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import com.bongladesch.plessme.common.adapter.util.BasicGenerator;
-import com.bongladesch.plessme.common.usecase.ILogger;
 import com.bongladesch.plessme.users.entity.User;
 
 @QuarkusTest
@@ -28,7 +28,7 @@ class TestMongoUserRepository {
   private User validUser;
 
   @Inject
-  public TestMongoUserRepository(ILogger logger) {
+  public TestMongoUserRepository(Logger logger) {
     // Initialize dependencies
     this.userRepository = new MongoUserRepository(logger);
     this.generator = new BasicGenerator();

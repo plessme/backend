@@ -13,10 +13,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.jboss.logging.Logger;
 import org.jboss.resteasy.annotations.cache.NoCache;
 
 import com.bongladesch.plessme.common.usecase.IGenerator;
-import com.bongladesch.plessme.common.usecase.ILogger;
 import com.bongladesch.plessme.users.entity.User;
 import com.bongladesch.plessme.users.entity.User.UserBuilder;
 import com.bongladesch.plessme.users.service.json.UserJSON;
@@ -35,7 +35,7 @@ import com.bongladesch.plessme.users.usecase.UserValidationException;
 public class UserService {
 
   private UserInfo userInfo;
-  private ILogger logger;
+  private Logger logger;
   private IGenerator generator;
   private IUserRepository userRepository;
   private IIdentityProvider identityProvider;
@@ -44,7 +44,7 @@ public class UserService {
    * Constructor for CDI.
    *
    * @param userInfo user data of identity
-   * @param logger logger used by the API and usecases
+   * @param logger logger used by the service implementation
    * @param generator generator to create UUID etc.
    * @param userRepository user repository dependency
    * @param identityProvider identity provider dependency
@@ -52,7 +52,7 @@ public class UserService {
   @Inject
   public UserService(
       UserInfo userInfo,
-      ILogger logger,
+      Logger logger,
       IGenerator generator,
       IUserRepository userRepository,
       IIdentityProvider identityProvider) {
@@ -75,9 +75,10 @@ public class UserService {
   @PermitAll
   @NoCache
   public Response createUser(UserJSON userJSON) {
+    logger.debug("Received HTTP request to createUser with input:");
+    logger.debug(userJSON);
     // Inject dependencies to the usecase on creation
-    UCreateUser createUserAccount =
-        new UCreateUser(logger, generator, userRepository, identityProvider);
+    UCreateUser createUserAccount = new UCreateUser(generator, userRepository, identityProvider);
     // Transform input object to user object
     UserBuilder userBuilder = new UserBuilder();
     User user =
@@ -89,10 +90,13 @@ public class UserService {
             .build();
     // Execute usecase and handle exceptions
     try {
+      logger.debug("Create user object from request input");
       user = createUserAccount.create(user);
     } catch (UserAlreadyExistsException uaee) {
+      logger.debug(uaee);
       return Response.status(403).build();
     } catch (UserValidationException uve) {
+      logger.debug(uve);
       return Response.status(400).build();
     }
     return Response.status(201).entity("{\"id\":\"" + user.getId() + "\"}").build();

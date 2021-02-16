@@ -38,4 +38,15 @@ public class UserJSON {
   public void setLastName(String lastName) {
     this.lastName = lastName;
   }
+
+  @Override
+  public String toString() {
+    return "{\n\t'email':'"
+        + getEmail()
+        + "',\n\t'password':'********',\n\t'firstName':'"
+        + getFirstName()
+        + "',\n\t'lastName':'"
+        + getLastName()
+        + "'\n}";
+  }
 }
