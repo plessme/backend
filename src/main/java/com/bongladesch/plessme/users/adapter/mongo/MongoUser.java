@@ -13,7 +13,9 @@ import com.bongladesch.plessme.users.entity.User.UserBuilder;
 @MongoEntity(collection = "user")
 public class MongoUser extends PanacheMongoEntityBase {
 
-  @BsonId public String id;
+  @BsonId
+  @BsonProperty("id")
+  public String id;
 
   @BsonProperty("email")
   public String email;
@@ -60,12 +62,22 @@ public class MongoUser extends PanacheMongoEntityBase {
   }
 
   /**
-   * Find an user in Mongo by e-mail.
+   * Find an user in MongoDB by e-mail.
    *
    * @param email e-mail of user
    * @return User as MongoUser object
    */
   public static MongoUser findByEmail(String email) {
     return find("email", email).firstResult();
+  }
+
+  /**
+   * Find an user in MongoDB by ID.
+   *
+   * @param id ID of user
+   * @return User as MongoUser object
+   */
+  public static MongoUser findById(String id) {
+    return find("id", id).firstResult();
   }
 }

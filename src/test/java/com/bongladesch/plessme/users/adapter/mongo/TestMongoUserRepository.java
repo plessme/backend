@@ -62,4 +62,24 @@ class TestMongoUserRepository {
     // Then
     assertNull(mongoUser);
   }
+
+  /** Test find user by id */
+  @Test
+  void testFindById() {
+    // Given
+    userRepository.create(validUser);
+    // When
+    User mongoUser = userRepository.findById(validUser.getId());
+    // Then
+    assertEquals(validUser, mongoUser);
+  }
+
+  /** Test find user by not existent id */
+  @Test
+  void testFindByIdNotExists() {
+    // When
+    User mongoUser = userRepository.findById("not-exists");
+    // Then
+    assertNull(mongoUser);
+  }
 }

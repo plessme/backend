@@ -23,6 +23,7 @@ import com.bongladesch.plessme.users.service.json.UserJSON;
 import com.bongladesch.plessme.users.usecase.IIdentityProvider;
 import com.bongladesch.plessme.users.usecase.IUserRepository;
 import com.bongladesch.plessme.users.usecase.UCreateUser;
+import com.bongladesch.plessme.users.usecase.UGetUser;
 import com.bongladesch.plessme.users.usecase.UserAlreadyExistsException;
 import com.bongladesch.plessme.users.usecase.UserValidationException;
 
@@ -107,6 +108,16 @@ public class UserService {
   @Produces(MediaType.APPLICATION_JSON)
   @NoCache
   public Response getUser() {
-    return Response.ok("{\"id\":\"" + userInfo.getString("plessmeid") + "\"}").build();
+    String id = userInfo.getString("plessmeid");
+    logger.debug("Received HTTP request to getUser with input" + id);
+    // Inject dependencies to the usecase on creation
+    UGetUser getUser = new UGetUser(userRepository);
+    // Search for user on repository
+    User user = getUser.getUser(id);
+    if (user == null) {
+      logger.debug("User with ID " + id + " not found.");
+      return Response.status(404).build();
+    }
+    return Response.ok(UserJSON.fromUser(user)).build();
   }
 }

@@ -20,4 +20,12 @@ public interface IUserRepository {
    * @return the user with incomming email address if exist, else "null"
    */
   User findByEmail(String email);
+
+  /**
+   * Find a user by his "id" in the database.
+   *
+   * @param id ID of the user
+   * @return the user with incomming ID if exists, else "null"
+   */
+  User findById(String id);
 }

@@ -54,4 +54,20 @@ public class MongoUserRepository implements IUserRepository {
     }
     return null;
   }
+
+  /**
+   * Find a user by id in database.
+   *
+   * @param user the id to search for the user
+   * @return user if found, null if not
+   */
+  @Override
+  public User findById(String id) {
+    logger.debug("Find a user by given id: " + id + " in MongoDB");
+    MongoUser user = MongoUser.findById(id);
+    if (user != null) {
+      return user.toUser();
+    }
+    return null;
+  }
 }

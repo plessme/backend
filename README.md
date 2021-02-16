@@ -34,7 +34,17 @@ You need to setup all dependencies with Docker(-Compose) for local development:
 Start you dependencies for the backend by executing:
 
 ```bash
-docker-compose -f src/main/docker/docker-compose.yaml up
+docker-compose -f src/main/docker/docker-compose.yaml up -d
+```
+
+#### Quarkus Profile
+
+Since quarkus supports profiles for different configuration you have the set the 'local' profile that the configuration fit's for local development.
+
+Set the following environment variable:
+
+```bash
+export QUARKUS_PROFILE=local
 ```
 
 ### Running the application in dev mode locally
@@ -59,7 +69,15 @@ The compiled executeable can be found at the `target/` folder.
 
 Or you can use Docker to build the native executable using a Docker container: `./mvnw package -Dnative -Dquarkus.native.container-build=true`.
 
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling#building-a-native-executable> .
+If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling#building-a-native-executable>.
+
+### Build Docker image
+
+After creating a native executable you can build a Docker image by executing:
+
+```bash
+docker build -t <image-tag> .
+```
 
 ### Running the tests
 
