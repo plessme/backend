@@ -1,5 +1,6 @@
 package com.bongladesch.plessme.users.entity;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -62,5 +63,23 @@ public class TestUser {
     boolean rt = user1.equals(userJson);
     // Then
     assertFalse(rt);
+  }
+
+  /** Test equals() method with null object */
+  @Test
+  public void testEqualNullUserObject() {
+    // When
+    boolean rt = user1.equals(null);
+    // Then
+    assertFalse(rt);
+  }
+
+  /** Test hashCode() method */
+  @Test
+  public void testHashCode() {
+    // When
+    int code = user1.hashCode();
+    // Then
+    assertEquals(user1.getId().hashCode(), code);
   }
 }
