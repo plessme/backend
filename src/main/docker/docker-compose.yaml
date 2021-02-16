@@ -10,7 +10,7 @@ services:
       KEYCLOAK_PASSWORD: keycloak
       KEYCLOAK_IMPORT: "/tmp/kc/plessme-realm.json -Dkeycloak.profile.feature.upload_scripts=enabled"
     volumes:
-      - ${PWD}/plessme-realm.json:/tmp/kc/plessme-realm.json
+      - ${PWD}/src/main/resources/plessme-realm.json:/tmp/kc/plessme-realm.json
   mongo:
     container_name: plessme-mongo
     image: mongo:4.4

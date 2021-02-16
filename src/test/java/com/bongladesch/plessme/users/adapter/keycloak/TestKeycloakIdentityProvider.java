@@ -2,6 +2,7 @@ package com.bongladesch.plessme.users.adapter.keycloak;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 
 import javax.inject.Inject;
@@ -14,6 +15,7 @@ import com.bongladesch.plessme.common.adapter.util.BasicGenerator;
 import com.bongladesch.plessme.users.entity.User;
 
 @QuarkusTest
+@QuarkusTestResource(KeycloakTestResource.class)
 @Tag("integration")
 public class TestKeycloakIdentityProvider {
 

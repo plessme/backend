@@ -3,6 +3,7 @@ package com.bongladesch.plessme.users.adapter.mongo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 
 import javax.inject.Inject;
@@ -15,6 +16,7 @@ import com.bongladesch.plessme.common.usecase.ILogger;
 import com.bongladesch.plessme.users.entity.User;
 
 @QuarkusTest
+@QuarkusTestResource(MongoTestResource.class)
 @Tag("integration")
 public class TestMongoUserRepository {
 

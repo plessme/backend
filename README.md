@@ -34,7 +34,7 @@ You need to setup all dependencies with Docker(-Compose) for local development:
 Start you dependencies for the backend by executing:
 
 ```bash
-docker-compose up
+docker-compose -f src/main/docker/docker-compose.yaml up
 ```
 
 ### Running the application in dev mode locally
