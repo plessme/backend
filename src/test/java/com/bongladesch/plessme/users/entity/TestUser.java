@@ -6,14 +6,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import com.bongladesch.plessme.users.service.json.UserJSON;
-
 class TestUser {
 
   // Test objects
   private User user1;
   private User user2;
-  private UserJSON userJson;
 
   // Initialize test data
   public TestUser() {
@@ -35,7 +32,6 @@ class TestUser {
             .firstName("tester")
             .lastName("tester")
             .build();
-    userJson = new UserJSON();
   }
 
   /** Test equals() method with identical user */
@@ -60,7 +56,7 @@ class TestUser {
   @Test
   void testEqualNoUserObject() {
     // When
-    boolean rt = user1.equals(userJson);
+    boolean rt = user1.equals(new Object());
     // Then
     assertFalse(rt);
   }

@@ -82,20 +82,18 @@ public class UserService {
     UserBuilder userBuilder = new UserBuilder();
     User user =
         userBuilder
-            .email(userJSON.email)
-            .password(userJSON.password)
-            .firstName(userJSON.firstName)
-            .lastName(userJSON.lastName)
+            .email(userJSON.getEmail())
+            .password(userJSON.getPassword())
+            .firstName(userJSON.getFirstName())
+            .lastName(userJSON.getLastName())
             .build();
     // Execute usecase and handle exceptions
     try {
       user = createUserAccount.create(user);
-    } catch (UserAlreadyExistsException | UserValidationException e) {
-      if (e instanceof UserAlreadyExistsException) {
-        return Response.status(403).build();
-      } else if (e instanceof UserValidationException) {
-        return Response.status(400).build();
-      }
+    } catch (UserAlreadyExistsException uaee) {
+      return Response.status(403).build();
+    } catch (UserValidationException uve) {
+      return Response.status(400).build();
     }
     return Response.status(201).entity("{\"id\":\"" + user.getId() + "\"}").build();
   }
