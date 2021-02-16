@@ -57,7 +57,7 @@ You can create a native executable using: `./mvnw quarkus:build -Pnative`.
 
 The compiled executeable can be found at the `target/` folder.
 
-Or you can use Docker to build the native executable using: `./mvnw package -Dnative -Dquarkus.native.container-build=true`.
+Or you can use Docker to build the native executable using a Docker container: `./mvnw package -Dnative -Dquarkus.native.container-build=true`.
 
 If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling#building-a-native-executable> .
 
