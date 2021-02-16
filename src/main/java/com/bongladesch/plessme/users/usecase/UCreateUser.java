@@ -13,7 +13,6 @@ import com.bongladesch.plessme.users.entity.User.UserBuilder;
 public final class UCreateUser {
 
   private static final Logger LOGGER = Logger.getLogger(UCreateUser.class);
-  ;
 
   private final IGenerator generator;
   private final IUserRepository repository;

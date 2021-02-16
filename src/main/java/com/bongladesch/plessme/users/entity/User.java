@@ -46,7 +46,9 @@ public class User {
     private String lastName;
 
     /** Default constructor for builder. */
-    public UserBuilder() {}
+    public UserBuilder() {
+      // No constructor necessary for Builder-Pattern
+    }
 
     public UserBuilder id(String id) {
       this.id = id;

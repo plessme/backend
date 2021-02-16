@@ -19,7 +19,7 @@ import com.bongladesch.plessme.users.entity.User.UserBuilder;
 /*
  * Test implementation for usecase "CreateUser".
  */
-public class TestCreateUser {
+class TestCreateUser {
 
   // Usecase dependencies
   private IGenerator mockedGenerator;
