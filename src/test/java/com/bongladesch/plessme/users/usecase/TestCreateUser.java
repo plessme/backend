@@ -92,7 +92,7 @@ public class TestCreateUser {
    * timestamp is added to the returned user object.
    */
   @Test
-  public void testCreateUser() {
+  void testCreateUser() {
     // Given
     Mockito.when(mockedGenerator.generateId()).thenReturn("UUID");
     Mockito.when(mockedGenerator.generateTimestamp()).thenReturn(123L);
@@ -101,17 +101,17 @@ public class TestCreateUser {
     // When
     User user = createUserUsecase.create(validUser);
     // Then
-    assertEquals(user.getId(), "UUID");
-    assertEquals(user.getCreated(), 123L);
-    assertEquals(user.getEmail(), "tester@gmail.com");
-    assertEquals(user.getPassword(), "password");
-    assertEquals(user.getFirstName(), "tester");
-    assertEquals(user.getLastName(), "tester");
+    assertEquals("UUID", user.getId());
+    assertEquals(123L, user.getCreated());
+    assertEquals("tester@gmail.com", user.getEmail());
+    assertEquals("password", user.getPassword());
+    assertEquals("tester", user.getFirstName());
+    assertEquals("tester", user.getLastName());
   }
 
   /** Create an already existing user. Expected a "UserAlreadyExists" exception. */
   @Test
-  public void testUserAlreadyExists() {
+  void testUserAlreadyExists() {
     // Given
     Mockito.when(mockedUserRepository.findByEmail(any(String.class))).thenReturn(validUser);
     // When
@@ -127,7 +127,7 @@ public class TestCreateUser {
 
   /** Create a user with invalid user data (empty password) Expect a UserValidationException. */
   @Test
-  public void testInvalidUserNoPassword() {
+  void testInvalidUserNoPassword() {
     // When
     Exception exception =
         assertThrows(
@@ -141,7 +141,7 @@ public class TestCreateUser {
 
   /** Create a user with invalid user data (null as password) Expect a UserValidationException. */
   @Test
-  public void testInvalidUserNullPassword() {
+  void testInvalidUserNullPassword() {
     // When
     Exception exception =
         assertThrows(
@@ -157,7 +157,7 @@ public class TestCreateUser {
    * Create a user with invalid user data (email is not passed) Expect a UserValidationException.
    */
   @Test
-  public void testInvalidUserEmptyEmail() {
+  void testInvalidUserEmptyEmail() {
     // When
     Exception exception =
         assertThrows(
@@ -171,7 +171,7 @@ public class TestCreateUser {
 
   /** Create a user with invalid user data (email is null) Expect a UserValidationException. */
   @Test
-  public void testInvalidUserNullEmail() {
+  void testInvalidUserNullEmail() {
     // When
     Exception exception =
         assertThrows(

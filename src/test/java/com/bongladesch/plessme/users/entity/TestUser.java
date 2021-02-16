@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import com.bongladesch.plessme.users.service.json.UserJSON;
 
-public class TestUser {
+class TestUser {
 
   // Test objects
   private User user1;
@@ -40,7 +40,7 @@ public class TestUser {
 
   /** Test equals() method with identical user */
   @Test
-  public void testEqualUser() {
+  void testEqualUser() {
     // When
     boolean rt = user1.equals(user1);
     // Then
@@ -49,7 +49,7 @@ public class TestUser {
 
   /** Test equals() method with different user */
   @Test
-  public void testNotEqualUser() {
+  void testNotEqualUser() {
     // When
     boolean rt = user1.equals(user2);
     // Then
@@ -58,7 +58,7 @@ public class TestUser {
 
   /** Test equals() method with non user object */
   @Test
-  public void testEqualNoUserObject() {
+  void testEqualNoUserObject() {
     // When
     boolean rt = user1.equals(userJson);
     // Then
@@ -67,7 +67,7 @@ public class TestUser {
 
   /** Test equals() method with null object */
   @Test
-  public void testEqualNullUserObject() {
+  void testEqualNullUserObject() {
     // When
     boolean rt = user1.equals(null);
     // Then
@@ -76,7 +76,7 @@ public class TestUser {
 
   /** Test hashCode() method */
   @Test
-  public void testHashCode() {
+  void testHashCode() {
     // When
     int code = user1.hashCode();
     // Then

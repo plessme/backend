@@ -12,14 +12,14 @@ import org.junit.jupiter.api.Test;
 /** Test implementation for usecase "GetUser". */
 @QuarkusTest
 @Tag("integration")
-public class TestGetUserService {
+class TestGetUserService {
 
   /** Test getUser from OIDC user info */
   @Test
   @TestSecurity(
       user = "tester@gmail.com",
       roles = {"user"})
-  public void testGetUser() {
+  void testGetUser() {
     given().when().get("/users").then().statusCode(200).body(is("{\"id\":\"UUID\"}"));
   }
 }

@@ -21,7 +21,7 @@ import com.bongladesch.plessme.users.usecase.IUserRepository;
 /** API Implementation test of CreateUser usecase. */
 @QuarkusTest
 @Tag("integration")
-public class TestCreateUserService {
+class TestCreateUserService {
 
   // Service dependencies
   @InjectMock private IGenerator generator;
@@ -53,7 +53,7 @@ public class TestCreateUserService {
 
   /** Test creation of valid an non-existing user. */
   @Test
-  public void testCreateValidUser() {
+  void testCreateValidUser() {
     given()
         .body(validTestUser)
         .contentType(ContentType.JSON)
@@ -66,7 +66,7 @@ public class TestCreateUserService {
 
   /** Test creation of invalid user. */
   @Test
-  public void testCreateInvalidUser() {
+  void testCreateInvalidUser() {
     given()
         .body(invalidTestUser)
         .contentType(ContentType.JSON)
@@ -78,7 +78,7 @@ public class TestCreateUserService {
 
   /** Test creation of user that already exists. */
   @Test
-  public void testCreateExistingUser() {
+  void testCreateExistingUser() {
     Mockito.when(userRepository.findByEmail("tester@gmail.com"))
         .thenReturn(new User.UserBuilder().email("tester@gmail.com").build());
     given()

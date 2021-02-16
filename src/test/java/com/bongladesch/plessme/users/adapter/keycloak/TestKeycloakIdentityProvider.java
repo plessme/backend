@@ -17,7 +17,7 @@ import com.bongladesch.plessme.users.entity.User;
 @QuarkusTest
 @QuarkusTestResource(KeycloakTestResource.class)
 @Tag("integration")
-public class TestKeycloakIdentityProvider {
+class TestKeycloakIdentityProvider {
 
   // Usecase dependencies
   @Inject KeycloakIdentityProvider identityProvider;
@@ -42,7 +42,7 @@ public class TestKeycloakIdentityProvider {
 
   /** Test creation of valid user in Keycloak */
   @Test
-  public void testUserCreation() {
+  void testUserCreation() {
     // When
     boolean rt = identityProvider.createUser(validUser);
     // Then

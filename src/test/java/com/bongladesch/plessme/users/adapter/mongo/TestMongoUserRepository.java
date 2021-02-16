@@ -18,7 +18,7 @@ import com.bongladesch.plessme.users.entity.User;
 @QuarkusTest
 @QuarkusTestResource(MongoTestResource.class)
 @Tag("integration")
-public class TestMongoUserRepository {
+class TestMongoUserRepository {
 
   // Usecase dependencies
   private MongoUserRepository userRepository;
@@ -46,7 +46,7 @@ public class TestMongoUserRepository {
 
   /** Test creation of a user in MongoDB and checking of find method returns expected user */
   @Test
-  public void testCreateAndFindUser() {
+  void testCreateAndFindUser() {
     // When
     userRepository.create(validUser);
     // Then
@@ -56,7 +56,7 @@ public class TestMongoUserRepository {
 
   /** Test find user by not existent email */
   @Test
-  public void testFindByEmailNotExists() {
+  void testFindByEmailNotExists() {
     // When
     User mongoUser = userRepository.findByEmail("not-exists");
     // Then
