@@ -13,7 +13,7 @@ public class KeycloakTestResource implements QuarkusTestResourceLifecycleManager
   static String keycloakUsername = "keycloak";
   static String keycloakPassword = "keycloak";
   static GenericContainer<?> keycloak =
-      new GenericContainer<>(DockerImageName.parse("jboss/keycloak:12.0.2"))
+      new GenericContainer<>(DockerImageName.parse("jboss/keycloak:12.0.3"))
           .withExposedPorts(8080)
           .withEnv("KEYCLOAK_USER", keycloakUsername)
           .withEnv("KEYCLOAK_PASSWORD", keycloakPassword)
